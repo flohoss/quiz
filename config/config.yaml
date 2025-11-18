@@ -1,0 +1,6 @@
+time_zone: 'Europe/Berlin'
+log_level: 'info'
+
+server:
+  address: '0.0.0.0'
+  port: 8156
