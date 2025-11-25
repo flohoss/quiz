@@ -10,6 +10,7 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 
 	"github.com/flohoss/christmas/config"
+	handlers "github.com/flohoss/christmas/handler"
 )
 
 func setupRouter() *echo.Echo {
@@ -37,6 +38,8 @@ func main() {
 		Level: config.GetLogLevel(),
 	}))
 	slog.SetDefault(logger)
+
+	handlers.SetupRouter(e)
 
 	slog.Info("Starting server", "url", fmt.Sprintf("http://%s", config.GetServer()))
 	slog.Error(e.Start(config.GetServer()).Error())
