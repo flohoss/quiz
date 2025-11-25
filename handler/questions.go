@@ -31,34 +31,31 @@ func validateAnswersOperation() huma.Operation {
 }
 
 func getQuestionsHandler(ctx context.Context, input *struct {
-	Lang string `query:"lang" default:"en" enum:"en,de" doc:"Language code"`
+	Language string `query:"language" doc:"Language code"`
 }) (*struct {
 	Body []config.QuestionAndAnswer `json:"questions"`
 }, error) {
-	questions, err := config.GetQuiz(input.Lang)
-	if err != nil {
-		return nil, huma.Error400BadRequest(err.Error())
-	}
 	return &struct {
 		Body []config.QuestionAndAnswer `json:"questions"`
-	}{Body: questions}, nil
+	}{Body: config.GetQuiz(input.Language)}, nil
 }
 
 func validateAnswersHandler(ctx context.Context, input *struct {
-	Lang string              `query:"lang" default:"en" enum:"en,de" doc:"Language code"`
-	Body []config.QuizAnswer `json:"answers"`
+	Language string              `query:"language" doc:"Language code"`
+	Body     []config.QuizAnswer `json:"answers"`
 }) (*struct {
-	Body []config.ValidationResult `json:"results"`
+	Body config.QuizResult `json:"results"`
 }, error) {
 	if len(input.Body) == 0 {
-		return nil, huma.Error400BadRequest("No answers provided")
+		return nil, huma.Error400BadRequest("no answers provided")
 	}
 
-	results, err := config.ValidateQuizAnswers(input.Body, input.Lang)
+	results, err := config.ValidateQuizAnswers(input.Body, input.Language)
 	if err != nil {
-		return nil, huma.Error400BadRequest("Validation failed: " + err.Error())
+		return nil, huma.Error400BadRequest("validation failed: " + err.Error())
 	}
+
 	return &struct {
-		Body []config.ValidationResult `json:"results"`
+		Body config.QuizResult `json:"results"`
 	}{Body: results}, nil
 }

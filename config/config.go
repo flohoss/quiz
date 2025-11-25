@@ -5,6 +5,7 @@ import (
 	"log/slog"
 	"math/rand"
 	"os"
+	"slices"
 	"strings"
 	"sync"
 	"time"
@@ -23,10 +24,11 @@ var validate *validator.Validate
 var mu sync.RWMutex
 
 type Config struct {
-	LogLevel string         `mapstructure:"log_level" validate:"omitempty,oneof=debug info warn error"`
-	TimeZone string         `mapstructure:"time_zone" validate:"omitempty,timezone"`
-	Server   ServerSettings `mapstructure:"server"`
-	Quiz     QuizSettings   `mapstructure:"quiz"`
+	LogLevel  string         `mapstructure:"log_level" validate:"omitempty,oneof=debug info warn error"`
+	TimeZone  string         `mapstructure:"time_zone" validate:"omitempty,timezone"`
+	Server    ServerSettings `mapstructure:"server"`
+	Quiz      QuizSettings   `mapstructure:"quiz"`
+	Languages []string       `mapstructure:"-" validate:"-"`
 }
 
 type ServerSettings struct {
@@ -61,8 +63,6 @@ func New() {
 	viper.SetConfigName("config")
 	viper.SetConfigType("yaml")
 	viper.AddConfigPath(ConfigFolder)
-	viper.SetEnvPrefix("CHRISTMAS")
-	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
 
 	if err := viper.ReadInConfig(); err != nil {
 		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
@@ -76,8 +76,6 @@ func New() {
 			os.Exit(1)
 		}
 	}
-
-	viper.AutomaticEnv()
 
 	if err := ValidateAndLoadConfig(viper.GetViper()); err != nil {
 		slog.Error("Initial configuration validation failed", "error", err)
@@ -93,6 +91,25 @@ func ValidateAndLoadConfig(v *viper.Viper) error {
 
 	if err := validate.Struct(tempCfg); err != nil {
 		return fmt.Errorf("configuration validation failed: %w", err)
+	}
+
+	langSet := make(map[string]struct{})
+	for _, q := range tempCfg.Quiz.Questions {
+		for lang := range q.Question {
+			langSet[lang] = struct{}{}
+		}
+	}
+	tempCfg.Languages = make([]string, 0, len(langSet))
+	for lang := range langSet {
+		tempCfg.Languages = append(tempCfg.Languages, lang)
+	}
+
+	for _, q := range tempCfg.Quiz.Questions {
+		for _, lang := range tempCfg.Languages {
+			if _, ok := q.Question[lang]; !ok {
+				return fmt.Errorf("question id %d is missing language key: %s", q.ID, lang)
+			}
+		}
 	}
 
 	mu.Lock()
@@ -128,25 +145,24 @@ func GetServer() string {
 	return fmt.Sprintf("%s:%d", cfg.Server.Address, cfg.Server.Port)
 }
 
-func validateLanguage(lang string) (string, error) {
-	if lang == "en" || lang == "de" {
-		return lang, nil
+func ValidateLanguage(lang string) error {
+	mu.RLock()
+	defer mu.RUnlock()
+	if slices.Contains(cfg.Languages, lang) {
+		return nil
 	}
-	return "", fmt.Errorf("unsupported language: %s", lang)
+	return fmt.Errorf("unsupported language, supported languages are: %v", cfg.Languages)
 }
 
 type QuestionAndAnswer struct {
-	ID       int      `json:"id"`
-	Question string   `json:"question"`
-	Answers  []string `json:"answers" nullable:"false" minItems:"1"`
+	ID            int      `json:"id"`
+	Question      string   `json:"question"`
+	Answers       []string `json:"answers" nullable:"false"`
+	UserAnswer    *int     `json:"user_answer,omitempty"`
+	CorrectAnswer *int     `json:"correct_answer,omitempty"`
 }
 
-func GetQuiz(lang string) ([]QuestionAndAnswer, error) {
-	validLang, err := validateLanguage(lang)
-	if err != nil {
-		return nil, fmt.Errorf("invalid language provided: %w", err)
-	}
-
+func GetQuiz(lang string) []QuestionAndAnswer {
 	mu.RLock()
 	defer mu.RUnlock()
 
@@ -156,23 +172,25 @@ func GetQuiz(lang string) ([]QuestionAndAnswer, error) {
 
 	result := make([]QuestionAndAnswer, len(shuffled))
 	for i, q := range shuffled {
-		question := q.Question[validLang]
-		answers := q.Answers[validLang]
+		question := q.Question[lang]
+		answers := q.Answers[lang]
 
 		result[i] = QuestionAndAnswer{
-			ID:       q.ID,
-			Question: question,
-			Answers:  answers,
+			ID:            q.ID,
+			Question:      question,
+			Answers:       answers,
+			UserAnswer:    nil,
+			CorrectAnswer: nil,
 		}
 	}
 
-	return result, nil
+	return result
 }
 
-type ValidationResult struct {
-	ID            int  `json:"id"`
-	UserAnswer    int  `json:"user_answer"`
-	CorrectAnswer *int `json:"correct_answer"`
+type QuizResult struct {
+	Questions      []QuestionAndAnswer `json:"questions" nullable:"false"`
+	CorrectAnswers int                 `json:"correct_answers"`
+	WrongAnswers   int                 `json:"wrong_answers"`
 }
 
 type QuizAnswer struct {
@@ -180,21 +198,15 @@ type QuizAnswer struct {
 	Answer int `json:"answer"`
 }
 
-func ValidateQuizAnswers(answers []QuizAnswer, lang string) ([]ValidationResult, error) {
-	validLang, err := validateLanguage(lang)
-	if err != nil {
-		return nil, fmt.Errorf("invalid language provided: %w", err)
-	}
-
+func ValidateQuizAnswers(answers []QuizAnswer, lang string) (QuizResult, error) {
 	mu.RLock()
 	defer mu.RUnlock()
 
-	results := make([]ValidationResult, len(answers))
+	result := QuizResult{
+		Questions: make([]QuestionAndAnswer, 0, len(answers)),
+	}
 
-	for i, answer := range answers {
-		result := ValidationResult{
-			ID: answer.ID,
-		}
+	for _, answer := range answers {
 
 		var foundQuestion *Question
 		for j := range cfg.Quiz.Questions {
@@ -205,28 +217,33 @@ func ValidateQuizAnswers(answers []QuizAnswer, lang string) ([]ValidationResult,
 		}
 
 		if foundQuestion == nil {
-			return nil, fmt.Errorf("question with ID %d not found", answer.ID)
+			continue
 		}
 
-		answers := foundQuestion.Answers[validLang]
+		answers := foundQuestion.Answers[lang]
 
 		if answer.Answer < 1 || answer.Answer > len(answers) {
-			return nil, fmt.Errorf("invalid answer index %d for question %d", answer.Answer, answer.ID)
+			return result, fmt.Errorf("invalid answer index %d for question %d", answer.Answer, answer.ID)
 		}
 
-		result.UserAnswer = answer.Answer
+		question := QuestionAndAnswer{
+			ID:         answer.ID,
+			UserAnswer: &answer.Answer,
+			Question:   foundQuestion.Question[lang],
+			Answers:    answers,
+		}
 
 		if answer.Answer != foundQuestion.CorrectAnswer {
-			if foundQuestion.CorrectAnswer >= 0 && foundQuestion.CorrectAnswer < len(answers) {
-				correctAnswerIdx := foundQuestion.CorrectAnswer
-				result.CorrectAnswer = &correctAnswerIdx
-			}
+			result.WrongAnswers++
+			question.CorrectAnswer = &foundQuestion.CorrectAnswer
+		} else {
+			result.CorrectAnswers++
 		}
 
-		results[i] = result
+		result.Questions = append(result.Questions, question)
 	}
 
-	return results, nil
+	return result, nil
 }
 
 func shuffleQuestions(questions []Question, amount int) []Question {
