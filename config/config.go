@@ -128,11 +128,11 @@ func GetServer() string {
 	return fmt.Sprintf("%s:%d", cfg.Server.Address, cfg.Server.Port)
 }
 
-func validateLanguage(lang string) string {
+func validateLanguage(lang string) (string, error) {
 	if lang == "en" || lang == "de" {
-		return lang
+		return lang, nil
 	}
-	return "en"
+	return "", fmt.Errorf("unsupported language: %s", lang)
 }
 
 type QuestionAndAnswer struct {
@@ -141,8 +141,11 @@ type QuestionAndAnswer struct {
 	Answers  []string `json:"answers" nullable:"false" minItems:"1"`
 }
 
-func GetQuiz(lang string) []QuestionAndAnswer {
-	lang = validateLanguage(lang)
+func GetQuiz(lang string) ([]QuestionAndAnswer, error) {
+	validLang, err := validateLanguage(lang)
+	if err != nil {
+		return nil, fmt.Errorf("invalid language provided: %w", err)
+	}
 
 	mu.RLock()
 	defer mu.RUnlock()
@@ -153,8 +156,8 @@ func GetQuiz(lang string) []QuestionAndAnswer {
 
 	result := make([]QuestionAndAnswer, len(shuffled))
 	for i, q := range shuffled {
-		question := q.Question[lang]
-		answers := q.Answers[lang]
+		question := q.Question[validLang]
+		answers := q.Answers[validLang]
 
 		result[i] = QuestionAndAnswer{
 			ID:       q.ID,
@@ -163,14 +166,13 @@ func GetQuiz(lang string) []QuestionAndAnswer {
 		}
 	}
 
-	return result
+	return result, nil
 }
 
 type ValidationResult struct {
-	ID            int     `json:"id"`
-	Question      string  `json:"question"`
-	UserAnswer    string  `json:"user_answer"`
-	CorrectAnswer *string `json:"correct_answer"`
+	ID            int  `json:"id"`
+	UserAnswer    int  `json:"user_answer"`
+	CorrectAnswer *int `json:"correct_answer"`
 }
 
 type QuizAnswer struct {
@@ -178,8 +180,11 @@ type QuizAnswer struct {
 	Answer int `json:"answer"`
 }
 
-func ValidateQuizAnswers(answers []QuizAnswer, lang string) []ValidationResult {
-	lang = validateLanguage(lang)
+func ValidateQuizAnswers(answers []QuizAnswer, lang string) ([]ValidationResult, error) {
+	validLang, err := validateLanguage(lang)
+	if err != nil {
+		return nil, fmt.Errorf("invalid language provided: %w", err)
+	}
 
 	mu.RLock()
 	defer mu.RUnlock()
@@ -199,35 +204,29 @@ func ValidateQuizAnswers(answers []QuizAnswer, lang string) []ValidationResult {
 			}
 		}
 
-		if foundQuestion != nil {
-			question := foundQuestion.Question[lang]
-			answers := foundQuestion.Answers[lang]
+		if foundQuestion == nil {
+			return nil, fmt.Errorf("question with ID %d not found", answer.ID)
+		}
 
-			result.Question = question
+		answers := foundQuestion.Answers[validLang]
 
-			if answer.Answer >= 0 && answer.Answer < len(answers) {
-				result.UserAnswer = answers[answer.Answer]
-			} else {
-				result.UserAnswer = "Invalid answer"
+		if answer.Answer < 0 || answer.Answer >= len(answers) {
+			return nil, fmt.Errorf("invalid answer index %d for question %d", answer.Answer, answer.ID)
+		}
+
+		result.UserAnswer = answer.Answer
+
+		if answer.Answer != foundQuestion.CorrectAnswer {
+			if foundQuestion.CorrectAnswer >= 0 && foundQuestion.CorrectAnswer < len(answers) {
+				correctAnswerIdx := foundQuestion.CorrectAnswer
+				result.CorrectAnswer = &correctAnswerIdx
 			}
-
-			if answer.Answer != foundQuestion.CorrectAnswer {
-				if foundQuestion.CorrectAnswer >= 0 && foundQuestion.CorrectAnswer < len(answers) {
-					correctAnswerStr := answers[foundQuestion.CorrectAnswer]
-					result.CorrectAnswer = &correctAnswerStr
-				}
-			}
-		} else {
-			result.Question = "Question not found"
-			result.UserAnswer = "Invalid question"
-			notFoundStr := "Question not found"
-			result.CorrectAnswer = &notFoundStr
 		}
 
 		results[i] = result
 	}
 
-	return results
+	return results, nil
 }
 
 func shuffleQuestions(questions []Question, amount int) []Question {

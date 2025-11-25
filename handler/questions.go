@@ -35,7 +35,10 @@ func getQuestionsHandler(ctx context.Context, input *struct {
 }) (*struct {
 	Body []config.QuestionAndAnswer `json:"questions"`
 }, error) {
-	questions := config.GetQuiz(input.Lang)
+	questions, err := config.GetQuiz(input.Lang)
+	if err != nil {
+		return nil, huma.Error400BadRequest(err.Error())
+	}
 	return &struct {
 		Body []config.QuestionAndAnswer `json:"questions"`
 	}{Body: questions}, nil
@@ -51,7 +54,10 @@ func validateAnswersHandler(ctx context.Context, input *struct {
 		return nil, huma.Error400BadRequest("No answers provided")
 	}
 
-	results := config.ValidateQuizAnswers(input.Body, input.Lang)
+	results, err := config.ValidateQuizAnswers(input.Body, input.Lang)
+	if err != nil {
+		return nil, huma.Error400BadRequest("Validation failed: " + err.Error())
+	}
 	return &struct {
 		Body []config.ValidationResult `json:"results"`
 	}{Body: results}, nil

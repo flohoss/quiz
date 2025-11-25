@@ -14,8 +14,8 @@ getQuestions().then((resp) => {
   <div class="container">
     <div v-if="questions === null">Loading...</div>
     <div v-else-if="questions === undefined">Error loading questions.</div>
-    <div v-else>
-      <div v-for="question in questions" :key="question.id" class="mb-4">
+    <div v-else class="grid gap-10">
+      <div v-for="question in questions" :key="question.id">
         <Question :question="question" />
       </div>
     </div>
