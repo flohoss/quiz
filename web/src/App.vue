@@ -1,13 +1,20 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { getQuestions } from './client/sdk.gen';
-import type { QuestionAndAnswer } from './client/types.gen';
+import type { QuestionAndAnswer, QuizAnswer } from './client/types.gen';
 import Question from './components/Question.vue';
 
 const questions = ref<QuestionAndAnswer[] | null | undefined>(null);
 getQuestions().then((resp) => {
   questions.value = resp.data;
 });
+
+const answers = ref<QuizAnswer[]>([]);
+
+function handleAnswerSelected(question: number, answer: number) {
+  answers.value = answers.value.filter((a) => a.id !== question);
+  answers.value.push({ id: question, answer: answer });
+}
 </script>
 
 <template>
@@ -16,7 +23,7 @@ getQuestions().then((resp) => {
     <div v-else-if="questions === undefined">Error loading questions.</div>
     <div v-else class="grid gap-10">
       <div v-for="question in questions" :key="question.id">
-        <Question :question="question" />
+        <Question :question="question" @answer-selected="handleAnswerSelected" />
       </div>
     </div>
   </div>
