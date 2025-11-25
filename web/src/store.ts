@@ -12,6 +12,7 @@ export const useGlobalState = createGlobalState(() => {
   const amount = computed<number>(() => questions.value.length);
   const question = computed<QuestionAndAnswer>(() => questions.value[index.value] ?? emptyQuestion);
   const answers = shallowRef<QuizAnswer[]>([]);
+  const selected = computed(() => answers.value.find((a: QuizAnswer) => a.id === question.value.id)?.answer);
 
   function loadQuestions() {
     let lang: 'de' | 'en' = 'de';
@@ -44,5 +45,5 @@ export const useGlobalState = createGlobalState(() => {
     answers.value.push({ id: question, answer: answer });
   }
 
-  return { questions, index, amount, question, answers, loadQuestions, nextIndex, previousIndex, handleAnswerSelected };
+  return { questions, index, amount, question, answers, selected, loadQuestions, nextIndex, previousIndex, handleAnswerSelected };
 });

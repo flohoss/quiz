@@ -10,7 +10,11 @@ const state = useGlobalState();
     <button @click="state.previousIndex" :disabled="state.index.value === 0" class="btn btn-secondary btn-square">
       <Icon class="size-6" icon="heroicons-outline:arrow-left" />
     </button>
-    <button @click="state.nextIndex" :disabled="state.index.value === state.questions.value.length - 1" class="btn btn-secondary btn-square">
+    <button
+      :disabled="state.index.value === state.questions.value.length - 1 || !state.selected.value"
+      @click="state.nextIndex"
+      class="btn btn-secondary btn-square"
+    >
       <Icon class="size-6" icon="heroicons-outline:arrow-right" />
     </button>
   </div>
