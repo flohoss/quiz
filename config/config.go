@@ -138,7 +138,7 @@ func validateLanguage(lang string) string {
 type QuestionAndAnswer struct {
 	ID       int      `json:"id"`
 	Question string   `json:"question"`
-	Answers  []string `json:"answers"`
+	Answers  []string `json:"answers" nullable:"false" minItems:"1"`
 }
 
 func GetQuiz(lang string) []QuestionAndAnswer {
@@ -205,15 +205,12 @@ func ValidateQuizAnswers(answers []QuizAnswer, lang string) []ValidationResult {
 
 			result.Question = question
 
-			// Set user answer as string
 			if answer.Answer >= 0 && answer.Answer < len(answers) {
 				result.UserAnswer = answers[answer.Answer]
 			} else {
 				result.UserAnswer = "Invalid answer"
 			}
 
-			// If answer is incorrect, set correct_answer to the correct answer string
-			// If answer is correct, correct_answer remains nil
 			if answer.Answer != foundQuestion.CorrectAnswer {
 				if foundQuestion.CorrectAnswer >= 0 && foundQuestion.CorrectAnswer < len(answers) {
 					correctAnswerStr := answers[foundQuestion.CorrectAnswer]
