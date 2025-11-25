@@ -1,59 +1,65 @@
 import { createGlobalState, useNavigatorLanguage } from '@vueuse/core';
-import { computed, ref, shallowRef } from 'vue';
-import type { QuestionAndAnswer, QuizAnswer, ValidationResult } from './client/types.gen';
+import { computed, shallowRef } from 'vue';
+import type { Quiz } from './client/types.gen';
 import { getQuestions, validateAnswers } from './client/sdk.gen';
 
-export const emptyQuestion: QuestionAndAnswer = { id: 0, question: '', answers: [] };
+export const emptyQuiz: Quiz = {
+  questions: [],
+  total: 0,
+};
 const { isSupported, language } = useNavigatorLanguage();
 
 export const useGlobalState = createGlobalState(() => {
-  const questions = shallowRef<QuestionAndAnswer[]>([emptyQuestion]);
-  const index = shallowRef<number>(0);
-  const amount = computed<number>(() => questions.value.length);
-  const question = computed<QuestionAndAnswer>(() => questions.value[index.value] ?? emptyQuestion);
-  const answers = shallowRef<QuizAnswer[]>([]);
-  const selected = computed(() => answers.value.find((a: QuizAnswer) => a.id === question.value.id)?.answer);
-  const result = shallowRef<ValidationResult[] | null>(null);
+  let lang = 'en';
+  if (isSupported.value && language.value) {
+    lang = language.value.split('-')[0] ?? 'en';
+  }
 
-  function loadQuestions() {
-    let lang: 'de' | 'en' = 'de';
-    if (isSupported.value && language.value) {
-      lang = language.value.startsWith('en') ? 'en' : 'de';
-    }
-    getQuestions({ query: { lang: lang } }).then((resp) => {
+  const quiz = shallowRef<Quiz>(emptyQuiz);
+  const index = shallowRef<number>(1);
+  const question = computed(() => quiz.value.questions[index.value - 1]);
+  const start = computed(() => index.value === 1);
+  const end = computed(() => index.value === quiz.value.total);
+
+  function loadQuiz() {
+    getQuestions({ query: { language: lang } }).then((resp) => {
       if (resp.error || !resp.data) {
         return;
       }
-      questions.value = resp.data;
+      quiz.value = resp.data;
     });
   }
-  loadQuestions();
+  loadQuiz();
 
   function nextIndex() {
-    if (index.value < questions.value.length - 1) {
+    if (!end.value) {
       index.value += 1;
     }
   }
 
   function previousIndex() {
-    if (index.value > 0) {
+    if (index.value > 1) {
       index.value -= 1;
     }
   }
 
-  function handleAnswerSelected(question: number, answer: number) {
-    answers.value = answers.value.filter((a) => a.id !== question);
-    answers.value.push({ id: question, answer: answer });
+  function handleAnswerSelected(id: number, answer: number) {
+    quiz.value = {
+      ...quiz.value,
+      questions: quiz.value.questions.map((q) => (q.id === id && q.answer !== answer ? { ...q, answer } : q)),
+    };
   }
 
-  async function submit() {
-    const response = await validateAnswers({ body: answers.value });
-    if (response.error) {
-      console.error('Error validating answers:', response.error);
-      return;
-    }
-    result.value = response.data || null;
+  function submit() {
+    const answers = quiz.value.questions.filter((q) => typeof q.answer === 'number').map((q) => ({ id: q.id, answer: q.answer as number }));
+
+    validateAnswers({ query: { language: lang }, body: answers }).then((resp) => {
+      if (resp.error || !resp.data) {
+        return;
+      }
+      quiz.value = resp.data;
+    });
   }
 
-  return { questions, index, amount, question, answers, selected, result, loadQuestions, nextIndex, previousIndex, handleAnswerSelected, submit };
+  return { quiz, index, question, start, end, loadQuiz, nextIndex, previousIndex, handleAnswerSelected, submit };
 });

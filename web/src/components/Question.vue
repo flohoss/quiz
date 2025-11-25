@@ -2,12 +2,12 @@
 import { ref } from 'vue';
 import { useGlobalState } from '../store';
 
-const { question, selected, handleAnswerSelected } = useGlobalState();
+const { question, handleAnswerSelected } = useGlobalState();
 const disabled = ref(false);
 </script>
 
 <template>
-  <div class="grid gap-6">
+  <div v-if="question" class="grid gap-6">
     <div class="text-2xl font-semibold">{{ question.question }}</div>
 
     <div class="grid gap-4">
@@ -19,7 +19,7 @@ const disabled = ref(false);
           :value="index + 1"
           class="radio"
           @change="handleAnswerSelected(question.id, index + 1)"
-          :checked="selected === index + 1"
+          :checked="question.answer === index + 1"
         />
         <label :for="`${question.id}-${index + 1}`" class="w-full select-none text-lg" :class="{ 'opacity-60': disabled }">
           {{ answer }}
