@@ -155,42 +155,43 @@ func ValidateLanguage(lang string) error {
 }
 
 type QuestionAndAnswer struct {
-	ID            int      `json:"id"`
-	Question      string   `json:"question"`
-	Answers       []string `json:"answers" nullable:"false"`
-	UserAnswer    *int     `json:"user_answer,omitempty"`
-	CorrectAnswer *int     `json:"correct_answer,omitempty"`
+	ID       int      `json:"id"`
+	Question string   `json:"question"`
+	Answers  []string `json:"answers" nullable:"false"`
+	Answer   *int     `json:"answer,omitempty"`
+	Correct  *bool    `json:"correct,omitempty"`
 }
 
-func GetQuiz(lang string) []QuestionAndAnswer {
+func GetQuiz(lang string) Quiz {
 	mu.RLock()
 	defer mu.RUnlock()
 
 	amount := min(cfg.Quiz.AmountOfQuestions, len(cfg.Quiz.Questions))
-
 	shuffled := shuffleQuestions(cfg.Quiz.Questions, amount)
 
-	result := make([]QuestionAndAnswer, len(shuffled))
-	for i, q := range shuffled {
+	quiz := Quiz{
+		Questions: make([]QuestionAndAnswer, 0, amount),
+		Total:     amount,
+	}
+
+	for _, q := range shuffled {
 		question := q.Question[lang]
 		answers := q.Answers[lang]
 
-		result[i] = QuestionAndAnswer{
-			ID:            q.ID,
-			Question:      question,
-			Answers:       answers,
-			UserAnswer:    nil,
-			CorrectAnswer: nil,
-		}
+		quiz.Questions = append(quiz.Questions, QuestionAndAnswer{
+			ID:       q.ID,
+			Question: question,
+			Answers:  answers,
+		})
 	}
 
-	return result
+	return quiz
 }
 
-type QuizResult struct {
-	Questions      []QuestionAndAnswer `json:"questions" nullable:"false"`
-	CorrectAnswers int                 `json:"correct_answers"`
-	WrongAnswers   int                 `json:"wrong_answers"`
+type Quiz struct {
+	Questions []QuestionAndAnswer `json:"questions" nullable:"false"`
+	Correct   *int                `json:"correct,omitempty"`
+	Total     int                 `json:"total"`
 }
 
 type QuizAnswer struct {
@@ -198,16 +199,17 @@ type QuizAnswer struct {
 	Answer int `json:"answer"`
 }
 
-func ValidateQuizAnswers(answers []QuizAnswer, lang string) (QuizResult, error) {
+func ValidateQuizAnswers(answers []QuizAnswer, lang string) (Quiz, error) {
 	mu.RLock()
 	defer mu.RUnlock()
 
-	result := QuizResult{
+	quiz := Quiz{
 		Questions: make([]QuestionAndAnswer, 0, len(answers)),
+		Total:     len(answers),
+		Correct:   new(int),
 	}
 
 	for _, answer := range answers {
-
 		var foundQuestion *Question
 		for j := range cfg.Quiz.Questions {
 			if cfg.Quiz.Questions[j].ID == answer.ID {
@@ -223,27 +225,26 @@ func ValidateQuizAnswers(answers []QuizAnswer, lang string) (QuizResult, error) 
 		answers := foundQuestion.Answers[lang]
 
 		if answer.Answer < 1 || answer.Answer > len(answers) {
-			return result, fmt.Errorf("invalid answer index %d for question %d", answer.Answer, answer.ID)
+			return quiz, fmt.Errorf("invalid answer index %d for question %d", answer.Answer, answer.ID)
 		}
 
 		question := QuestionAndAnswer{
-			ID:         answer.ID,
-			UserAnswer: &answer.Answer,
-			Question:   foundQuestion.Question[lang],
-			Answers:    answers,
+			ID:       answer.ID,
+			Answer:   &answer.Answer,
+			Question: foundQuestion.Question[lang],
+			Answers:  answers,
+			Correct:  new(bool),
 		}
 
-		if answer.Answer != foundQuestion.CorrectAnswer {
-			result.WrongAnswers++
-			question.CorrectAnswer = &foundQuestion.CorrectAnswer
-		} else {
-			result.CorrectAnswers++
+		if answer.Answer == foundQuestion.CorrectAnswer {
+			*quiz.Correct++
+			*question.Correct = true
 		}
 
-		result.Questions = append(result.Questions, question)
+		quiz.Questions = append(quiz.Questions, question)
 	}
 
-	return result, nil
+	return quiz, nil
 }
 
 func shuffleQuestions(questions []Question, amount int) []Question {

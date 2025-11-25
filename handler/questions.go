@@ -33,10 +33,10 @@ func validateAnswersOperation() huma.Operation {
 func getQuestionsHandler(ctx context.Context, input *struct {
 	Language string `query:"language" doc:"Language code"`
 }) (*struct {
-	Body []config.QuestionAndAnswer `json:"questions"`
+	Body config.Quiz `json:"questions"`
 }, error) {
 	return &struct {
-		Body []config.QuestionAndAnswer `json:"questions"`
+		Body config.Quiz `json:"questions"`
 	}{Body: config.GetQuiz(input.Language)}, nil
 }
 
@@ -44,7 +44,7 @@ func validateAnswersHandler(ctx context.Context, input *struct {
 	Language string              `query:"language" doc:"Language code"`
 	Body     []config.QuizAnswer `json:"answers"`
 }) (*struct {
-	Body config.QuizResult `json:"results"`
+	Body config.Quiz `json:"results"`
 }, error) {
 	if len(input.Body) == 0 {
 		return nil, huma.Error400BadRequest("no answers provided")
@@ -56,6 +56,6 @@ func validateAnswersHandler(ctx context.Context, input *struct {
 	}
 
 	return &struct {
-		Body config.QuizResult `json:"results"`
+		Body config.Quiz `json:"results"`
 	}{Body: results}, nil
 }
