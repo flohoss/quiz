@@ -1,6 +1,6 @@
 import { createGlobalState, useNavigatorLanguage } from '@vueuse/core';
-import { computed, shallowRef } from 'vue';
-import type { QuestionAndAnswer, QuizAnswer } from './client/types.gen';
+import { computed, ref, shallowRef } from 'vue';
+import type { QuestionAndAnswer, QuizAnswer, ValidationResult } from './client/types.gen';
 import { getQuestions, validateAnswers } from './client/sdk.gen';
 
 export const emptyQuestion: QuestionAndAnswer = { id: 0, question: '', answers: [] };
@@ -13,6 +13,7 @@ export const useGlobalState = createGlobalState(() => {
   const question = computed<QuestionAndAnswer>(() => questions.value[index.value] ?? emptyQuestion);
   const answers = shallowRef<QuizAnswer[]>([]);
   const selected = computed(() => answers.value.find((a: QuizAnswer) => a.id === question.value.id)?.answer);
+  const result = shallowRef<ValidationResult[] | null>(null);
 
   function loadQuestions() {
     let lang: 'de' | 'en' = 'de';
@@ -51,8 +52,8 @@ export const useGlobalState = createGlobalState(() => {
       console.error('Error validating answers:', response.error);
       return;
     }
-    console.log('Validation result:', response.data);
+    result.value = response.data || null;
   }
 
-  return { questions, index, amount, question, answers, selected, loadQuestions, nextIndex, previousIndex, handleAnswerSelected, submit };
+  return { questions, index, amount, question, answers, selected, result, loadQuestions, nextIndex, previousIndex, handleAnswerSelected, submit };
 });
