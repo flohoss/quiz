@@ -210,7 +210,7 @@ func ValidateQuizAnswers(answers []QuizAnswer, lang string) ([]ValidationResult,
 
 		answers := foundQuestion.Answers[validLang]
 
-		if answer.Answer < 0 || answer.Answer >= len(answers) {
+		if answer.Answer < 1 || answer.Answer > len(answers) {
 			return nil, fmt.Errorf("invalid answer index %d for question %d", answer.Answer, answer.ID)
 		}
 

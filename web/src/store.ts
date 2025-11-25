@@ -1,7 +1,7 @@
 import { createGlobalState, useNavigatorLanguage } from '@vueuse/core';
 import { computed, shallowRef } from 'vue';
 import type { QuestionAndAnswer, QuizAnswer } from './client/types.gen';
-import { getQuestions } from './client/sdk.gen';
+import { getQuestions, validateAnswers } from './client/sdk.gen';
 
 export const emptyQuestion: QuestionAndAnswer = { id: 0, question: '', answers: [] };
 const { isSupported, language } = useNavigatorLanguage();
@@ -45,5 +45,14 @@ export const useGlobalState = createGlobalState(() => {
     answers.value.push({ id: question, answer: answer });
   }
 
-  return { questions, index, amount, question, answers, selected, loadQuestions, nextIndex, previousIndex, handleAnswerSelected };
+  async function submit() {
+    const response = await validateAnswers({ body: answers.value });
+    if (response.error) {
+      console.error('Error validating answers:', response.error);
+      return;
+    }
+    console.log('Validation result:', response.data);
+  }
+
+  return { questions, index, amount, question, answers, selected, loadQuestions, nextIndex, previousIndex, handleAnswerSelected, submit };
 });
