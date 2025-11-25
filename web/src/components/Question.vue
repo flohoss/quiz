@@ -11,7 +11,7 @@ const disabled = ref(false);
     <div class="text-2xl font-semibold">{{ question.question }}</div>
 
     <div class="grid gap-4">
-      <div class="flex items-center gap-4" v-for="(answer, index) in question.answers" :key="`${question.id}-${index + 1}`">
+      <div class="flex items-center" v-for="(answer, index) in question.answers" :key="`${question.id}-${index + 1}`">
         <input
           type="radio"
           :id="`${question.id}-${index + 1}`"
@@ -21,7 +21,7 @@ const disabled = ref(false);
           @change="handleAnswerSelected(question.id, index + 1)"
           :checked="question.answer === index + 1"
         />
-        <label :for="`${question.id}-${index + 1}`" class="w-full select-none text-lg" :class="{ 'opacity-60': disabled }">
+        <label :for="`${question.id}-${index + 1}`" class="w-full pl-4 select-none text-lg" :class="{ 'opacity-60': disabled }">
           {{ answer }}
         </label>
       </div>

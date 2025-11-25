@@ -1,11 +1,15 @@
 <script setup lang="ts">
 import Question from './components/Question.vue';
 import Navigation from './components/Navigation.vue';
+import { useGlobalState } from './store';
+import Result from './components/Result.vue';
+
+const { submitted } = useGlobalState();
 </script>
 
 <template>
   <div class="container">
-    <div class="hero min-h-screen">
+    <div v-if="!submitted" class="hero min-h-screen">
       <div class="hero-content">
         <div class="card w-xl h-screen max-h-96 shadow-sm">
           <div class="card-body">
@@ -16,6 +20,9 @@ import Navigation from './components/Navigation.vue';
           </div>
         </div>
       </div>
+    </div>
+    <div v-else>
+      <Result />
     </div>
   </div>
 </template>
