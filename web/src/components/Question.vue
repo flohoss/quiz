@@ -1,20 +1,38 @@
 <script setup lang="ts">
-import type { QuestionAndAnswer } from '../client/types.gen';
+import type { QuestionAndAnswer, ValidationResult } from '../client/types.gen';
 
-defineProps<{ question: QuestionAndAnswer }>();
+const props = defineProps<{
+  question: QuestionAndAnswer;
+  validationResult?: ValidationResult | null;
+  disabled?: boolean;
+}>();
+
 const emit = defineEmits<{
   (e: 'answerSelected', question: number, answer: number): void;
 }>();
+
+function handleAnswerChange(answerIndex: number) {
+  if (props.disabled) return;
+  emit('answerSelected', props.question.id, answerIndex);
+}
 </script>
 
 <template>
-  <div class="grid gap-5">
+  <div class="grid gap-2">
     <h3>{{ question.question }}</h3>
 
-    <div>
-      <div class="flex items-center" v-for="(answer, id) in question.answers" :key="answer">
-        <input type="radio" :id="answer" :name="question.question" :value="answer" class="radio" @change="emit('answerSelected', question.id, id + 1)" />
-        <label :for="answer" class="pl-4 w-full select-none">
+    <div class="grid gap-1">
+      <div class="flex items-center" v-for="(answer, index) in question.answers" :key="index">
+        <input
+          type="radio"
+          :id="`${question.id}-${index + 1}`"
+          :name="`question-${question.id}`"
+          :value="index + 1"
+          class="radio"
+          :disabled="disabled"
+          @change="handleAnswerChange(index + 1)"
+        />
+        <label :for="`${question.id}-${index + 1}`" class="pl-4 w-full select-none" :class="{ 'opacity-60': disabled }">
           {{ answer }}
         </label>
       </div>

@@ -15,7 +15,7 @@ quiz:
       answers:
         en: ["17", "24", "30"]
         de: ["17", "24", "30"]
-      correct_answer: 1
+      correct_answer: 2
     - id: 2
       question:
         en: "What is celebrated at Christmas?"
@@ -23,7 +23,7 @@ quiz:
       answers:
         en: ["Angels getting married", "Reindeer having birthdays", "The birth of Jesus Christ"]
         de: ["Die Engel heiraten", "Die Rentiere haben Geburtstag", "Die Geburt von Jesus Christus"]
-      correct_answer: 2
+      correct_answer: 3
     - id: 3
       question:
         en: "What does Santa bring to naughty children?"
@@ -31,7 +31,7 @@ quiz:
       answers:
         en: ["A rod/switch", "Hard nuts", "Cookies"]
         de: ["Eine Rute", "Harte Nüsse", "Kekse"]
-      correct_answer: 0
+      correct_answer: 1
     - id: 4
       question:
         en: "Which animals pull Santa's sleigh?"
@@ -39,7 +39,7 @@ quiz:
       answers:
         en: ["Huskies", "Horses", "Reindeer"]
         de: ["Huskies", "Pferde", "Rentiere"]
-      correct_answer: 2
+      correct_answer: 3
     - id: 5
       question:
         en: "Which animals were in the stable of the baby Jesus' manger?"
@@ -47,7 +47,7 @@ quiz:
       answers:
         en: ["Ox and donkey", "Cow and camel", "Dog and cat"]
         de: ["Ochs und Esel", "Kuh und Kamel", "Hund und Katze"]
-      correct_answer: 0
+      correct_answer: 1
     - id: 6
       question:
         en: "What are the names of the three wise men?"
@@ -55,7 +55,7 @@ quiz:
       answers:
         en: ["Nicholas, Matthew and Joseph", "Caspar, Melchior and Balthasar", "Andreas, Augustus and Abraham"]
         de: ["Nikolaus, Matthäus und Joseph", "Caspar, Melchior und Balthasar", "Andreas, Augustus und Abraham"]
-      correct_answer: 1
+      correct_answer: 2
     - id: 7
       question:
         en: "Knecht Ruprecht is..."
@@ -63,7 +63,7 @@ quiz:
       answers:
         en: ["St. Nicholas' helper", "A mean adversary of Santa", "An invention by Christian Andersen in a fairy tale"]
         de: ["Der Gehilfe des Nikolaus", "Ein fieser Widersacher des Weihnachtsmannes", "Eine Erfindung von Christian Andersen in einem Märchen"]
-      correct_answer: 0
+      correct_answer: 1
     - id: 8
       question:
         en: "How many needles does an average (1.70m tall) Christmas tree have?"
@@ -71,7 +71,7 @@ quiz:
       answers:
         en: ["470,000", "690,000", "180,000"]
         de: ["470.000", "690.000", "180.000"]
-      correct_answer: 2
+      correct_answer: 3
     - id: 9
       question:
         en: "What do the British call the second day of Christmas (December 26th)?"
@@ -79,7 +79,7 @@ quiz:
       answers:
         en: ["Boxing Day", "Reindeer Day", "Santa Day"]
         de: ["Boxing Day", "Rendeer Day", "Santa Day"]
-      correct_answer: 0
+      correct_answer: 1
     - id: 10
       question:
         en: "Who invented the Advent calendar?"
@@ -87,7 +87,7 @@ quiz:
       answers:
         en: ["The Romans around 400 AD", "An English pastor in the 19th century", "The chocolate industry in the 20th century"]
         de: ["Die Römer etwa 400 n. Chr.", "Ein englischer Pfarrer im 19. Jahrhundert", "Die Schokoladenindustrie im 20. Jahrhundert"]
-      correct_answer: 1
+      correct_answer: 2
     - id: 11
       question:
         en: "Who distributes gifts in Iceland?"
@@ -95,7 +95,7 @@ quiz:
       answers:
         en: ["The 13 Christmas trolls called Jólasveinar", "Santa called Jólasveinn", "The 21 volcano elves called Eldfjallálfar"]
         de: ["Die 13 Weihnachtstrolle, genannt Jólasveinar", "Der Weihnachtsmann, genannt Jólasveinn", "Die 21 Vulkanelfen, genannt Eldfjallálfar"]
-      correct_answer: 0
+      correct_answer: 1
     - id: 12
       question:
         en: "Who composed the song 'White Christmas'?"
@@ -103,7 +103,7 @@ quiz:
       answers:
         en: ["Johnny Cash", "Irving Berlin", "Nat King Cole"]
         de: ["Johnny Cash", "Irving Berlin", "Nat King Cole"]
-      correct_answer: 1
+      correct_answer: 2
     - id: 13
       question:
         en: "What color was Santa's coat before Coca Cola dressed him in red?"
@@ -111,7 +111,7 @@ quiz:
       answers:
         en: ["White", "Gold", "Blue"]
         de: ["Weiß", "Gold", "Blau"]
-      correct_answer: 2
+      correct_answer: 3
     - id: 14
       question:
         en: "Which islands don't exist?"
@@ -119,7 +119,7 @@ quiz:
       answers:
         en: ["Christmas Islands", "Advent Islands", "Easter Islands"]
         de: ["Weihnachtsinseln", "Adventsinseln", "Osterinseln"]
-      correct_answer: 1
+      correct_answer: 2
     - id: 15
       question:
         en: "When was Christmas first celebrated?"
@@ -127,7 +127,7 @@ quiz:
       answers:
         en: ["In the 4th century", "In the 15th century", "In the year 3 after Christ's birth"]
         de: ["im 4. Jahrhundert", "im 15. Jahrhundert", "im Jahre 3 nach Christi Geburt"]
-      correct_answer: 0
+      correct_answer: 1
     - id: 16
       question:
         en: "Which Asian country is the only one where Christmas is a public holiday?"
@@ -135,7 +135,7 @@ quiz:
       answers:
         en: ["China", "South Korea", "Malaysia"]
         de: ["China", "Südkorea", "Malaysia"]
-      correct_answer: 1
+      correct_answer: 2
     - id: 17
       question:
         en: "What does 'Merry Christmas' mean in Spanish?"
@@ -143,7 +143,7 @@ quiz:
       answers:
         en: ["Muchas Gracias", "Feliz Navidad", "Bienvenidos"]
         de: ["Muchas Gracias", "Feliz Navidad", "Bienvenidos"]
-      correct_answer: 1
+      correct_answer: 2
     - id: 18
       question:
         en: "What is a legendary Christmas dish from Great Britain called?"
@@ -151,7 +151,7 @@ quiz:
       answers:
         en: ["Santa Cheese Boots", "Jelly Bag Cap Cake", "Christmas pudding"]
         de: ["Santa Cheese Boots (Weihnachtsmann-Käse-Stiefel)", "Jelly Bag Cap Cake (Zipfelmützenkekse)", "Plumpudding (Weihnachtspudding)"]
-      correct_answer: 2
+      correct_answer: 3
     - id: 19
       question:
         en: "What are the children looking forward to in the song 'Let us be happy and cheerful'?"
@@ -159,7 +159,7 @@ quiz:
       answers:
         en: ["St. Nicholas evening", "First Advent", "Christmas Eve"]
         de: ["Nikolausabend", "Erster Advent", "Heiligabend"]
-      correct_answer: 0
+      correct_answer: 1
     - id: 20
       question:
         en: "In the Christmas bakery there's..."
@@ -167,7 +167,7 @@ quiz:
       answers:
         en: ["A forgotten Easter egg", "Many a delicacy", "A huge celebration"]
         de: ["Ein vergessenes Osterei", "So manche Leckerei", "Ein riesen Fest"]
-      correct_answer: 1
+      correct_answer: 2
     - id: 21
       question:
         en: "What is a nativity play?"
@@ -175,7 +175,7 @@ quiz:
       answers:
         en: ["An old musical instrument", "A play performed at Christmas", "A Christmas board game for the whole family"]
         de: ["Ein altes Musikinstrument", "Ein Theaterstück, das zu Weihnachten aufgeführt wird", "Ein weihnachtliches Brettspiel für die ganze Familie"]
-      correct_answer: 1
+      correct_answer: 2
     - id: 22
       question:
         en: "What's special about the Finnish Santa Joulupukki?"
@@ -183,7 +183,7 @@ quiz:
       answers:
         en: ["He has no beard", "He is married", "He has no red coat"]
         de: ["Er hat keinen Bart", "Er ist verheiratet", "Er hat keinen roten Mantel"]
-      correct_answer: 1
+      correct_answer: 2
     - id: 23
       question:
         en: "Where does the poinsettia plant come from?"
@@ -191,7 +191,7 @@ quiz:
       answers:
         en: ["From the Mohawk of North America", "From the Aborigines of Australia", "From the Aztecs of Mexico"]
         de: ["Von den Mohawk aus Nordamerika", "Von den Aborigines aus Australien", "Von den Azteken aus Mexiko"]
-      correct_answer: 2
+      correct_answer: 3
     - id: 24
       question:
         en: "In Finland, children run from house to house before Christmas dressed as..."
@@ -199,7 +199,7 @@ quiz:
       answers:
         en: ["Elves", "Reindeer", "Santa"]
         de: ["Elf/e", "Rentier", "Weihnachtsmann"]
-      correct_answer: 0
+      correct_answer: 1
     - id: 25
       question:
         en: "Where did the idea for the song 'Rudolph The Red-Nosed Reindeer' come from?"
@@ -207,7 +207,7 @@ quiz:
       answers:
         en: ["From the eighth American President Martin van Buren", "From composer Johnny Marks", "From a children's coloring book"]
         de: ["Vom achten amerikanischen Präsidenten Martin van Buren", "Vom Komponisten Johnny Marks", "Aus einem Kindermalbuch"]
-      correct_answer: 2
+      correct_answer: 3
     - id: 26
       question:
         en: "Where does the Christmas Child come from?"
@@ -215,7 +215,7 @@ quiz:
       answers:
         en: ["Martin Luther introduced it in the 16th century", "It comes from Christmas customs in Scandinavia", "It's an invention by Walt Disney"]
         de: ["Martin Luther führte es im 16. Jahrhundert ein", "Es stammt aus den Weihnachtsbräuchen in Skandinavien", "Es ist eine Erfindung von Walt Disney"]
-      correct_answer: 0
+      correct_answer: 1
     - id: 27
       question:
         en: "What is marzipan made from?"
@@ -223,7 +223,7 @@ quiz:
       answers:
         en: ["Walnuts", "Dates", "Almonds"]
         de: ["Walnüsse", "Datteln", "Mandeln"]
-      correct_answer: 2
+      correct_answer: 3
     - id: 28
       question:
         en: "How many Christmas songs are there approximately according to the Office for Christmas Songs in Graz?"
@@ -231,7 +231,7 @@ quiz:
       answers:
         en: ["30,000", "3,000", "300"]
         de: ["30.000", "3.000", "300"]
-      correct_answer: 0
+      correct_answer: 1
     - id: 29
       question:
         en: "How many candles did the Advent wreath have when it was invented?"
@@ -239,7 +239,7 @@ quiz:
       answers:
         en: ["23", "It was always 4 from the beginning", "1, in rare cases 2"]
         de: ["23", "Von Anfang an waren es 4", "1, in seltenen Fällen 2"]
-      correct_answer: 0
+      correct_answer: 1
     - id: 30
       question:
         en: "What percentage of alcohol must mulled wine contain in Germany to be called mulled wine?"
@@ -247,4 +247,4 @@ quiz:
       answers:
         en: ["12%", "7%", "There is no regulation for this"]
         de: ["12%", "7%", "Es gibt hierfür keine Vorschrift"]
-      correct_answer: 1
+      correct_answer: 2

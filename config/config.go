@@ -43,7 +43,7 @@ type Question struct {
 	ID            int                 `mapstructure:"id" validate:"min=0"`
 	Question      map[string]string   `mapstructure:"question" validate:"required"`
 	Answers       map[string][]string `mapstructure:"answers" validate:"required"`
-	CorrectAnswer int                 `mapstructure:"correct_answer" validate:"min=0,max=2"`
+	CorrectAnswer int                 `mapstructure:"correct_answer" validate:"min=1,max=3"`
 }
 
 func init() {
