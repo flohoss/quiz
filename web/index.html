@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="de" data-theme="business">
 
 <head>
   <meta charset="UTF-8" />
@@ -11,6 +11,23 @@
   <meta name="apple-mobile-web-app-title" content="Christmas" />
   <link rel="manifest" href="/site.webmanifest" />
   <title>Christmas</title>
+  <script>
+    try {
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const language = parsed.language || (navigator.language?.split('-')[0] === 'de' ? 'de' : 'en');
+
+      const storage = localStorage.getItem('florian-hoss');
+      const parsed = storage ? JSON.parse(storage) : { language: language, darkMode: prefersDark };
+
+      const theme = parsed.darkMode ? 'business' : 'corporate';
+      document.documentElement.setAttribute('data-theme', theme);
+
+      document.documentElement.setAttribute('lang', language);
+    } catch (e) {
+      // Silently ignore errors (e.g. malformed localStorage)
+    }
+  </script>
+
 </head>
 
 <body>

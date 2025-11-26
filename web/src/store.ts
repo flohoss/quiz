@@ -21,6 +21,7 @@ export const useGlobalState = createGlobalState(() => {
   const start = computed(() => index.value === 1);
   const end = computed(() => index.value === quiz.value.total);
   const submitted = shallowRef(false);
+  const page = computed(() => index.value + ' / ' + quiz.value.total);
 
   function loadQuiz() {
     getQuestions({ query: { language: lang } }).then((resp) => {
@@ -63,5 +64,11 @@ export const useGlobalState = createGlobalState(() => {
     });
   }
 
-  return { quiz, index, question, start, end, submitted, nextIndex, previousIndex, handleAnswerSelected, submit };
+  function reset() {
+    index.value = 1;
+    loadQuiz();
+    submitted.value = false;
+  }
+
+  return { quiz, index, question, start, end, submitted, page, nextIndex, previousIndex, handleAnswerSelected, submit, reset };
 });
