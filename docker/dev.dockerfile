@@ -4,9 +4,9 @@ ARG V_ALPINE=3
 FROM alpine:${V_ALPINE} AS logo
 WORKDIR /app
 RUN apk add figlet > /dev/null 2>&1
-RUN figlet Christmas > logo.txt
+RUN figlet Quiz > logo.txt
 
-FROM golang:${V_GOLANG}-alpine
+FROM golang:${V_GOLANG}-alpine AS final
 RUN apk add --update --no-cache dumb-init && \
     rm -rf /tmp/* /var/tmp/* /usr/share/man /var/cache/apk/*
 
