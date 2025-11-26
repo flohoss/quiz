@@ -8,7 +8,7 @@ const store = useLocalStore();
 watch(
   () => store.value.darkMode,
   (newDarkMode) => {
-    const theme = newDarkMode ? 'business' : 'corporate';
+    const theme = newDarkMode ? 'dark' : 'light';
     document.documentElement.setAttribute('data-theme', theme);
   },
   { immediate: true }

@@ -27,6 +27,7 @@ type Config struct {
 	LogLevel  string         `mapstructure:"log_level" validate:"omitempty,oneof=debug info warn error"`
 	TimeZone  string         `mapstructure:"time_zone" validate:"omitempty,timezone"`
 	Server    ServerSettings `mapstructure:"server"`
+	UI        UI             `mapstructure:"ui"`
 	Quiz      QuizSettings   `mapstructure:"quiz"`
 	Languages []string       `mapstructure:"-" validate:"-"`
 }
@@ -34,6 +35,11 @@ type Config struct {
 type ServerSettings struct {
 	Address string `mapstructure:"address" validate:"required,ipv4"`
 	Port    int    `mapstructure:"port" validate:"required,gte=1024,lte=65535"`
+}
+
+type UI struct {
+	Title string `mapstructure:"title"`
+	Logo  string `mapstructure:"logo"`
 }
 
 type QuizSettings struct {
@@ -143,6 +149,12 @@ func GetServer() string {
 	mu.RLock()
 	defer mu.RUnlock()
 	return fmt.Sprintf("%s:%d", cfg.Server.Address, cfg.Server.Port)
+}
+
+func GetUI() UI {
+	mu.RLock()
+	defer mu.RUnlock()
+	return cfg.UI
 }
 
 func ValidateLanguage(lang string) error {

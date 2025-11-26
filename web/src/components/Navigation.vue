@@ -7,24 +7,21 @@ const { start, end, question, submitted, previousIndex, nextIndex, submit, reset
 </script>
 
 <template>
-  <template v-if="submitted">
-    <div class="flex-1"></div>
-    <button @click="reset" class="btn btn-warning btn-circle btn-lg">
-      <Icon class="size-6" icon="heroicons-outline:refresh" />
-    </button>
-  </template>
-  <template v-else>
-    <button @click="previousIndex" :disabled="start" class="btn btn-primary btn-circle btn-lg">
-      <Icon class="size-6" icon="heroicons-outline:arrow-left" />
+  <div class="flex justify-between">
+    <button @click="previousIndex" :disabled="start || submitted" class="nav-btn btn-secondary">
+      <Icon class="size-6" icon="fa6-solid:hand-point-left" />
     </button>
     <div class="flex items-center gap-5">
       <ThemeChanger />
     </div>
-    <button v-if="end" :disabled="!question?.answer" @click="submit" class="btn btn-success btn-circle btn-lg">
-      <Icon class="size-6" icon="heroicons-outline:check" />
+    <button v-if="end && !submitted" :disabled="!question?.answer" @click="submit" class="nav-btn btn-primary">
+      <Icon class="size-6" icon="fa6-solid:gifts" />
     </button>
-    <button v-else :disabled="!question?.answer" @click="nextIndex" class="btn btn-primary btn-circle btn-lg">
-      <Icon class="size-6" icon="heroicons-outline:arrow-right" />
+    <button v-else-if="!submitted" :disabled="!question?.answer" @click="nextIndex" class="nav-btn btn-primary">
+      <Icon class="size-6" icon="fa6-solid:sleigh" />
     </button>
-  </template>
+    <button v-else @click="reset" class="nav-btn btn-warning">
+      <Icon class="size-6" icon="heroicons-outline:refresh" />
+    </button>
+  </div>
 </template>

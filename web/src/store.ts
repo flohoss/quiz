@@ -21,15 +21,26 @@ export const useGlobalState = createGlobalState(() => {
   const start = computed(() => index.value === 1);
   const end = computed(() => index.value === quiz.value.total);
   const submitted = shallowRef(false);
-  const page = computed(() => index.value + ' / ' + quiz.value.total);
+  const loading = shallowRef(true);
 
-  function loadQuiz() {
-    getQuestions({ query: { language: lang } }).then((resp) => {
-      if (resp.error || !resp.data) {
-        return;
-      }
-      quiz.value = resp.data;
-    });
+  async function loadQuiz() {
+    loading.value = true;
+    const startTime = Date.now();
+    const resp = await getQuestions({ query: { language: lang } });
+    const elapsed = Date.now() - startTime;
+    if (resp.error || !resp.data) {
+      loading.value = false;
+      return;
+    }
+    quiz.value = resp.data;
+
+    if (elapsed < 500) {
+      setTimeout(() => {
+        loading.value = false;
+      }, 500 - elapsed);
+    } else {
+      loading.value = false;
+    }
   }
   loadQuiz();
 
@@ -70,5 +81,5 @@ export const useGlobalState = createGlobalState(() => {
     submitted.value = false;
   }
 
-  return { quiz, index, question, start, end, submitted, page, nextIndex, previousIndex, handleAnswerSelected, submit, reset };
+  return { quiz, index, question, start, end, submitted, loading, nextIndex, previousIndex, handleAnswerSelected, submit, reset };
 });

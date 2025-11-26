@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="" data-theme="business">
+<html lang="" data-theme="dark">
 
 <head>
   <meta charset="UTF-8" />
@@ -19,7 +19,7 @@
       const parsed = storage ? JSON.parse(storage) : {};
 
       const language = parsed.language || (navigator.language?.split('-')[0] === 'de' ? 'de' : 'en');
-      const theme = parsed.darkMode ? 'business' : 'corporate';
+      const theme = parsed.darkMode ? 'dark' : 'light';
 
       document.documentElement.setAttribute('data-theme', theme);
       document.documentElement.setAttribute('lang', language);
@@ -30,7 +30,7 @@
 
 </head>
 
-<body>
+<body class='bg-base-200'>
   <div id="app"></div>
   <script type="module" src="/src/main.ts"></script>
 </body>

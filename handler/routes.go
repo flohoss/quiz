@@ -49,6 +49,7 @@ func SetupRouter(e *echo.Echo) {
 		)
 	})
 	e.Renderer = initTemplates()
+	huma.Register(h, getUIOperation(), getUIHandler)
 
 	h.UseMiddleware(languageValidationMiddleware(h))
 	huma.Register(h, getQuestionsOperation(), getQuestionsHandler)

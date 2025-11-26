@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useGlobalState } from '../store';
-import Question from './Question.vue';
+import Question from './Answers.vue';
 
 const { quiz } = useGlobalState();
 </script>

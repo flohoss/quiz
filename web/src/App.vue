@@ -1,90 +1,50 @@
 <script setup lang="ts">
-import Question from './components/Question.vue';
+import HeroCard from './components/HeroCard.vue';
 import Navigation from './components/Navigation.vue';
 import { useGlobalState } from './store';
-import Result from './components/Result.vue';
+import QuestionAndAnswers from './components/QuestionAndAnswers.vue';
+import { UI } from './main';
+import LoadingDots from './components/LoadingDots.vue';
 
-const { submitted, question, page } = useGlobalState();
+const { quiz, question, loading, submitted } = useGlobalState();
 </script>
 
 <template>
-  <div class="h-screen flex flex-col">
-    <div class="sticky top-0 flex w-full justify-center p-2 md:p-5 bg-base-200/50">
-      <div class="badge badge-xl badge-secondary rounded-full">{{ page }}</div>
-    </div>
-
-    <div class="flex-1 flex flex-col min-h-0 overflow-y-auto overflow-x-hidden p-5 md:p-10 lg:p-20">
-      <div class="w-full my-auto flex flex-col items-center">
-        <Transition name="slide-forward" mode="out-in" appear>
-          <Question v-if="!submitted" :question="question" />
-          <Result v-else />
-        </Transition>
+  <HeroCard>
+    <template v-slot:header>
+      <div class="flex justify-center h-16" v-html="UI.data?.Logo"></div>
+    </template>
+    <div class="relative w-full h-full min-h-[200px]">
+      <div v-if="submitted" class="grid gap-8 lg:gap-12">
+        <QuestionAndAnswers v-for="question in quiz.questions" :question="question" :key="question.id" />
       </div>
+      <Transition v-else name="crossfade" mode="out-in" appear>
+        <QuestionAndAnswers v-if="!loading && question" :question="question" key="question" />
+        <LoadingDots v-else />
+      </Transition>
     </div>
-    <div class="sticky bottom-0 p-2 md:p-5 bg-base-200/50">
-      <div class="flex items-center w-full justify-between gap-5 mx-auto max-w-200">
-        <Navigation />
-      </div>
-    </div>
-  </div>
+    <template v-slot:footer>
+      <Navigation />
+    </template>
+  </HeroCard>
 </template>
 
-<style>
-/* Forward animation (left to right) */
-.slide-forward-enter-active {
-  transition: all 0.6s ease-out;
+<style scoped>
+.crossfade-enter-active,
+.crossfade-leave-active {
+  position: absolute;
+  left: 0;
+  right: 0;
+  width: 100%;
+  transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
 }
-
-.slide-forward-leave-active {
-  transition: all 0.6s ease-in;
-}
-
-.slide-forward-enter-from {
+.crossfade-enter-from,
+.crossfade-leave-to {
   opacity: 0;
-  transform: translateX(50px);
 }
-
-.slide-forward-enter-to {
+.crossfade-enter-to,
+.crossfade-leave-from {
   opacity: 1;
-  transform: translateX(0);
-}
-
-.slide-forward-leave-from {
-  opacity: 1;
-  transform: translateX(0);
-}
-
-.slide-forward-leave-to {
-  opacity: 0;
-  transform: translateX(-50px);
-}
-
-/* Backward animation (right to left) */
-.slide-backward-enter-active {
-  transition: all 0.6s ease-out;
-}
-
-.slide-backward-leave-active {
-  transition: all 0.6s ease-in;
-}
-
-.slide-backward-enter-from {
-  opacity: 0;
-  transform: translateX(-50px);
-}
-
-.slide-backward-enter-to {
-  opacity: 1;
-  transform: translateX(0);
-}
-
-.slide-backward-leave-from {
-  opacity: 1;
-  transform: translateX(0);
-}
-
-.slide-backward-leave-to {
-  opacity: 0;
-  transform: translateX(50px);
 }
 </style>

@@ -2,19 +2,34 @@
 @plugin "daisyui";
 
 @plugin 'daisyui/theme' {
-    name: corporate;
+    name: light;
     default: true;
     prefersdark: false;
+    --color-primary: #eb912d;
+    --color-primary-content: #ffffff;
+    --color-secondary: #15458a;
+    --color-secondary-content: #ffffff;
 }
 
 @plugin 'daisyui/theme' {
-    name: business;
+    name: dark;
     default: false;
     prefersdark: true;
-    --color-primary: #0082ce;
+    --color-primary: #eb912d;
+    --color-primary-content: #ffffff;
+    --color-secondary: #15458a;
+    --color-secondary-content: #ffffff;
 }
 
 @utility container {
     margin-inline: auto;
     padding: 2rem 1rem;
+}
+
+@utility nav-btn {
+    @apply btn btn-square btn-lg;
+}
+
+@utility hover {
+    @apply hover:cursor-pointer hover:bg-primary hover:text-primary-content;
 }
