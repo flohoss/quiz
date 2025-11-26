@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/danielgtaylor/huma/v2"
-	"github.com/flohoss/christmas/config"
+	"github.com/flohoss/quiz/config"
 )
 
 func getQuestionsOperation() huma.Operation {

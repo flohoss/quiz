@@ -1,27 +1,27 @@
 <!doctype html>
-<html lang="de" data-theme="business">
+<html lang="" data-theme="business">
 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <link rel="shortcut icon" href="/favicon.ico" />
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-  <meta name="apple-mobile-web-app-title" content="Christmas" />
-  <link rel="manifest" href="/site.webmanifest" />
-  <title>Christmas</title>
+  <meta name="google" content="notranslate" />
+  <link rel="icon" type="image/png" href="/static/favicon-96x96.png" sizes="96x96" />
+  <link rel="icon" type="image/svg+xml" href="/static/favicon.svg" />
+  <link rel="shortcut icon" href="/static/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/static/apple-touch-icon.png" />
+  <meta name="apple-mobile-web-app-title" content="MyWebSite" />
+  <link rel="manifest" href="/static/site.webmanifest" />
+  <title>Quiz</title>
   <script>
     try {
       const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const storage = localStorage.getItem('quiz');
+      const parsed = storage ? JSON.parse(storage) : {};
+
       const language = parsed.language || (navigator.language?.split('-')[0] === 'de' ? 'de' : 'en');
-
-      const storage = localStorage.getItem('florian-hoss');
-      const parsed = storage ? JSON.parse(storage) : { language: language, darkMode: prefersDark };
-
       const theme = parsed.darkMode ? 'business' : 'corporate';
-      document.documentElement.setAttribute('data-theme', theme);
 
+      document.documentElement.setAttribute('data-theme', theme);
       document.documentElement.setAttribute('lang', language);
     } catch (e) {
       // Silently ignore errors (e.g. malformed localStorage)

@@ -9,8 +9,8 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 
-	"github.com/flohoss/christmas/config"
-	handlers "github.com/flohoss/christmas/handler"
+	"github.com/flohoss/quiz/config"
+	handlers "github.com/flohoss/quiz/handler"
 )
 
 func setupRouter() *echo.Echo {

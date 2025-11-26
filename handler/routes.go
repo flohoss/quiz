@@ -5,7 +5,7 @@ import (
 
 	"github.com/danielgtaylor/huma/v2"
 	"github.com/danielgtaylor/huma/v2/adapters/humaecho"
-	"github.com/flohoss/christmas/config"
+	"github.com/flohoss/quiz/config"
 	"github.com/labstack/echo/v4"
 )
 
@@ -28,7 +28,7 @@ func languageValidationMiddleware(api huma.API) func(ctx huma.Context, next func
 }
 
 func SetupRouter(e *echo.Echo) {
-	config := huma.DefaultConfig("Christmas API", "1.0.0")
+	config := huma.DefaultConfig("Quiz API", "1.0.0")
 	config.OpenAPIPath = "/api/openapi"
 	config.SchemasPath = "/api/schemas"
 	h := humaecho.New(e, config)

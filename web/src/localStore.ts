@@ -1,6 +1,6 @@
 import { createGlobalState, usePreferredColorScheme, usePreferredLanguages, useStorage } from '@vueuse/core';
 
-export const STORAGE_KEY = 'florian-hoss';
+export const STORAGE_KEY = 'quiz';
 export const LANGUAGES = ['de', 'en'];
 
 const preferredLanguages = usePreferredLanguages();

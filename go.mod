@@ -1,4 +1,4 @@
-module github.com/flohoss/christmas
+module github.com/flohoss/quiz
 
 go 1.25.3
 
