@@ -7,11 +7,18 @@ server:
 
 app:
   title: 'Awesome Quiz'
-  amount_of_questions: 10
+  amount_of_questions: 5
   logo: '/app/config/logo.svg'
   languages:
     - 'en'
     - 'de'
+  css_variables:
+    --color-primary: '#ff473e'
+    --color-primary-content: '#ffffff'
+    --color-secondary: '#dee2e2'
+    --color-secondary-content: '#000000'
+    --color-accent: '#294221'
+    --color-accent-content: '#ffffff'
 
 questions:
   - id: 1

@@ -37,10 +37,11 @@ type ServerSettings struct {
 }
 
 type AppSettings struct {
-	Title             string   `mapstructure:"title" validate:"required"`
-	AmountOfQuestions int      `mapstructure:"amount_of_questions" validate:"required,gte=1"`
-	Logo              string   `mapstructure:"logo" validate:"required,image"`
-	Languages         []string `mapstructure:"languages" validate:"dive,required,bcp47_language_tag" nullable:"false"`
+	Title             string            `mapstructure:"title" validate:"required"`
+	AmountOfQuestions int               `mapstructure:"amount_of_questions" validate:"required,gte=1"`
+	Logo              string            `mapstructure:"logo" validate:"required,image"`
+	Languages         []string          `mapstructure:"languages" validate:"dive,required,bcp47_language_tag" nullable:"false"`
+	CSSVariables      map[string]string `mapstructure:"css_variables" validate:"dive,required"`
 }
 
 type QuestionSetting struct {

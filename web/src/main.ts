@@ -24,6 +24,13 @@ if (Setting.error || !Setting.data) {
 
 document.title = Setting.data.Title;
 
+if (Setting.data.CSSVariables) {
+  const root = document.documentElement;
+  Object.entries(Setting.data.CSSVariables).forEach(([key, value]) => {
+    root.style.setProperty(key, value);
+  });
+}
+
 const { language } = useNavigatorLanguage();
 let lang = '';
 if (language.value) {

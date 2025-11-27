@@ -21,12 +21,12 @@ const { submitted, handleAnswerSelected } = useGlobalState();
             ? 'bg-error text-error-content border-error ring-error'
             : // Active state (selected, not yet submitted)
               question.answer === index + 1 && !submitted
-              ? 'bg-primary text-primary-content border-primary ring-primary'
+              ? 'bg-accent text-accent-content border-accent ring-accent'
               : // Disabled state (not selected, after submit)
                 submitted
                 ? 'bg-base-200/50 text-base-content border-base-300/50 opacity-60 cursor-not-allowed'
                 : // Default
-                  'bg-base-200/50 text-base-content border-base-300/50 hover:bg-base-300 hover:border-primary active:bg-primary active:text-primary-content',
+                  'text-base-content border-base-200/50 hover:bg-base-200 hover:border-base-300 active:bg-accent active:text-accent-content',
       ]"
       :disabled="submitted"
       @click="handleAnswerSelected(question.id, index + 1)"
