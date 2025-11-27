@@ -7,7 +7,7 @@ const { submitted, handleAnswerSelected } = useGlobalState();
 </script>
 
 <template>
-  <div class="grid gap-4">
+  <div class="grid gap-4 px-5">
     <button
       v-for="(answer, index) in question.answers"
       :key="`${question.id}-${index + 1}`"
@@ -24,9 +24,9 @@ const { submitted, handleAnswerSelected } = useGlobalState();
               ? 'bg-primary text-primary-content border-primary ring-primary'
               : // Disabled state (not selected, after submit)
                 submitted
-                ? 'bg-base-300 text-base-content border-base-300 opacity-60 cursor-not-allowed'
+                ? 'bg-base-200/50 text-base-content border-base-300/50 opacity-60 cursor-not-allowed'
                 : // Default
-                  'bg-base-200 text-base-content border-base-300 hover:bg-base-300 hover:border-primary active:bg-primary active:text-primary-content',
+                  'bg-base-200/50 text-base-content border-base-300/50 hover:bg-base-300 hover:border-primary active:bg-primary active:text-primary-content',
       ]"
       :disabled="submitted"
       @click="handleAnswerSelected(question.id, index + 1)"

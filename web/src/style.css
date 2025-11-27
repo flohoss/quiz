@@ -2,23 +2,15 @@
 @plugin "daisyui";
 
 @plugin 'daisyui/theme' {
-    name: light;
+    name: corporate;
     default: true;
     prefersdark: false;
-    --color-primary: #eb912d;
-    --color-primary-content: #ffffff;
-    --color-secondary: #15458a;
-    --color-secondary-content: #ffffff;
 }
 
 @plugin 'daisyui/theme' {
-    name: dark;
+    name: business;
     default: false;
     prefersdark: true;
-    --color-primary: #eb912d;
-    --color-primary-content: #ffffff;
-    --color-secondary: #15458a;
-    --color-secondary-content: #ffffff;
 }
 
 @utility container {

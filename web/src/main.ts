@@ -8,8 +8,8 @@ import { useNavigatorLanguage, useDark } from '@vueuse/core';
 export const IsDark = useDark({
   selector: 'html',
   attribute: 'data-theme',
-  valueDark: 'dark',
-  valueLight: 'light',
+  valueDark: 'business',
+  valueLight: 'corporate',
   storageKey: 'quiz-theme',
 });
 
