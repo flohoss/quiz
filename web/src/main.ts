@@ -4,6 +4,7 @@ import App from './App.vue';
 import { client } from './client/client.gen';
 import { getApp } from './client/sdk.gen';
 import { useNavigatorLanguage, useDark } from '@vueuse/core';
+import { useGlobalState } from './store';
 
 export const IsDark = useDark({
   selector: 'html',
@@ -26,12 +27,38 @@ export const AppSetting = Setting.data;
 
 document.title = Setting.data.Title;
 
+const root = document.documentElement;
+const originalVars = { ...Setting.data.CSSVariables };
 if (Setting.data.CSSVariables) {
-  const root = document.documentElement;
   Object.entries(Setting.data.CSSVariables).forEach(([key, value]) => {
     root.style.setProperty(key, value);
   });
 }
+
+// Colorless state watcher
+const { colorless } = useGlobalState();
+import { watch } from 'vue';
+const colorlessVars = {
+  '--color-primary': '#cccccc',
+  '--color-primary-content': '#222222',
+  '--color-secondary': '#cccccc',
+  '--color-secondary-content': '#222222',
+  '--color-success': '#cccccc',
+  '--color-success-content': '#222222',
+  '--color-error': '#cccccc',
+  '--color-error-content': '#222222',
+};
+watch(colorless, (val) => {
+  if (val) {
+    Object.entries(colorlessVars).forEach(([key, value]) => {
+      root.style.setProperty(key, value);
+    });
+  } else {
+    Object.entries(originalVars).forEach(([key, value]) => {
+      root.style.setProperty(key, value);
+    });
+  }
+});
 
 const { language } = useNavigatorLanguage();
 let lang = '';

@@ -23,6 +23,7 @@ export const useGlobalState = createGlobalState(() => {
   const submitted = shallowRef(false);
   const loading = shallowRef(true);
   const direction = shallowRef<'forward' | 'backward'>('forward');
+  const colorless = shallowRef(false);
 
   async function loadQuiz() {
     loading.value = true;
@@ -35,11 +36,6 @@ export const useGlobalState = createGlobalState(() => {
     loading.value = false;
   }
   loadQuiz();
-
-  function firstPage() {
-    direction.value = 'backward';
-    index.value = 1;
-  }
 
   function nextIndex() {
     if (!end.value) {
@@ -62,16 +58,25 @@ export const useGlobalState = createGlobalState(() => {
     };
   }
 
+  function setColorless(val: boolean) {
+    colorless.value = val;
+  }
+
   function submit() {
+    setColorless(true);
     submitted.value = true;
-    firstPage();
     const answers = quiz.value.questions.filter((q) => typeof q.answer === 'number').map((q) => ({ id: q.id, answer: q.answer as number }));
 
-    validateAnswers({ query: { language: lang }, body: answers }).then((resp) => {
+    const minTime = new Promise((resolve) => setTimeout(resolve, 500));
+    const validation = validateAnswers({ query: { language: lang }, body: answers });
+
+    Promise.all([minTime, validation]).then(([, resp]) => {
       if (resp.error || !resp.data) {
+        setColorless(false);
         return;
       }
       quiz.value = resp.data;
+      setColorless(false);
     });
   }
 
@@ -81,5 +86,21 @@ export const useGlobalState = createGlobalState(() => {
     submitted.value = false;
   }
 
-  return { quiz, index, question, start, end, submitted, loading, direction, nextIndex, previousIndex, handleAnswerSelected, submit, reset };
+  return {
+    quiz,
+    index,
+    question,
+    start,
+    end,
+    submitted,
+    loading,
+    direction,
+    nextIndex,
+    previousIndex,
+    handleAnswerSelected,
+    submit,
+    reset,
+    colorless,
+    setColorless,
+  };
 });

@@ -7,7 +7,7 @@ server:
 
 app:
   title: 'Christmas Quiz'
-  amount_of_questions: 2
+  amount_of_questions: 5
   logo: '/app/config/logo.svg'
   languages:
     - 'en'
