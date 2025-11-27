@@ -53,8 +53,8 @@ watch(index, scrollToActive);
         'cursor-pointer',
         { 'pointer-events-none select-none': !submitted },
         { 'step-primary': !submitted && index === i + 1 },
-        { 'step-success': submitted && quiz.questions[i]?.correct === true },
-        { 'step-error': submitted && quiz.questions[i]?.correct === false },
+        { 'step-success': submitted && quiz.questions[i]?.correct === undefined },
+        { 'step-error': submitted && quiz.questions[i]?.correct !== undefined },
         { 'step-secondary': submitted && quiz.questions[i]?.correct == null && step.answered },
         { step: !step.answered && (!submitted || quiz.questions[i]?.correct == null) },
       ]"

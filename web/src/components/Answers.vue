@@ -13,20 +13,23 @@ const { submitted, handleAnswerSelected } = useGlobalState();
       :key="`${question.id}-${index + 1}`"
       class="transition-all duration-200 rounded-lg px-5 py-3 w-full text-lg font-medium shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2"
       :class="[
-        // Success state
-        question.answer === index + 1 && submitted && question.correct
-          ? 'bg-success text-success-content ring-success'
-          : // Error state
-            question.answer === index + 1 && submitted && !question.correct
-            ? 'bg-error text-error-content ring-error'
-            : // Active state (selected, not yet submitted)
-              question.answer === index + 1 && !submitted
-              ? 'bg-secondary text-secondary-content ring-secondary'
-              : // Disabled state (not selected, after submit)
-                submitted
-                ? 'bg-base-200/50 text-base-content opacity-60 cursor-not-allowed'
-                : // Default
-                  'bg-base-200/50 text-base-content hover:bg-base-200 active:bg-secondary active:text-secondary-content',
+        /* REAL correct answer when provided */
+        submitted && typeof question.correct === 'number' && question.correct === index + 1
+          ? 'bg-success text-success-content ring-success font-bold border-2 border-success'
+          : /* Selected answer is wrong when correct exists */
+            submitted && typeof question.correct === 'number' && question.answer === index + 1 && question.answer !== question.correct
+            ? 'bg-error text-error-content ring-error border-2 border-error'
+            : /* No correct provided → selected answer is treated as correct */
+              submitted && typeof question.correct !== 'number' && question.answer === index + 1
+              ? 'bg-success text-success-content ring-success font-bold border-2 border-success'
+              : /* Selection before submit */
+                question.answer === index + 1 && !submitted
+                ? 'bg-secondary text-secondary-content ring-secondary'
+                : /* Other buttons after submit */
+                  submitted
+                  ? 'bg-base-200/50 text-base-content opacity-60 cursor-not-allowed'
+                  : /* Default */
+                    'bg-base-200/50 text-base-content hover:bg-base-200 active:bg-secondary active:text-secondary-content',
       ]"
       :disabled="submitted"
       @click="handleAnswerSelected(question.id, index + 1)"
