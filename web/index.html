@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="" data-theme="dark">
+<html>
 
 <head>
   <meta charset="UTF-8" />
@@ -12,21 +12,6 @@
   <meta name="apple-mobile-web-app-title" content="MyWebSite" />
   <link rel="manifest" href="/static/site.webmanifest" />
   <title>Quiz</title>
-  <script>
-    try {
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      const storage = localStorage.getItem('quiz');
-      const parsed = storage ? JSON.parse(storage) : {};
-
-      const language = parsed.language || (navigator.language?.split('-')[0] === 'de' ? 'de' : 'en');
-      const theme = parsed.darkMode ? 'dark' : 'light';
-
-      document.documentElement.setAttribute('data-theme', theme);
-      document.documentElement.setAttribute('lang', language);
-    } catch (e) {
-      // Silently ignore errors (e.g. malformed localStorage)
-    }
-  </script>
 
 </head>
 

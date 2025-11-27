@@ -3,14 +3,36 @@ import './style.css';
 import App from './App.vue';
 import { client } from './client/client.gen';
 import { getApp } from './client/sdk.gen';
+import { useNavigatorLanguage, useDark } from '@vueuse/core';
+
+export const IsDark = useDark({
+  selector: 'html',
+  attribute: 'data-theme',
+  valueDark: 'dark',
+  valueLight: 'light',
+  storageKey: 'quiz-theme',
+});
 
 export const BackendURL = import.meta.env.MODE === 'development' ? 'http://localhost:8156' : '';
 
 client.setConfig({ baseUrl: BackendURL });
 
 export const Setting = await getApp();
-if (Setting.data?.Title) {
-  document.title = Setting.data.Title;
+if (Setting.error || !Setting.data) {
+  throw new Error('Failed to load app settings');
+}
+
+document.title = Setting.data.Title;
+
+const { language } = useNavigatorLanguage();
+let lang = '';
+if (language.value) {
+  lang = language.value.split('-')[0] ?? '';
+}
+if (Setting.data.Languages.includes(lang)) {
+  document.documentElement.setAttribute('lang', lang);
+} else if (Array.isArray(Setting.data.Languages) && Setting.data.Languages.length > 0 && typeof Setting.data.Languages[0] === 'string') {
+  document.documentElement.setAttribute('lang', Setting.data.Languages[0]);
 }
 
 createApp(App).mount('#app');

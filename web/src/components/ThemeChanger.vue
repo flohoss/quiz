@@ -1,29 +1,16 @@
 <script setup lang="ts">
-import { watch } from 'vue';
-import { useLocalStore } from '../localStore';
 import { Icon } from '@iconify/vue';
+import { useToggle } from '@vueuse/core';
+import { IsDark } from '../main';
 
-const store = useLocalStore();
-
-watch(
-  () => store.value.darkMode,
-  (newDarkMode) => {
-    const theme = newDarkMode ? 'dark' : 'light';
-    document.documentElement.setAttribute('data-theme', theme);
-  },
-  { immediate: true }
-);
-
-const toggleTheme = () => {
-  store.value.darkMode = !store.value.darkMode;
-};
+const toggleDark = useToggle(IsDark);
 </script>
 
 <template>
   <label class="swap swap-rotate">
-    <input type="checkbox" :checked="store.darkMode" @change="toggleTheme()" class="hidden" />
+    <input type="checkbox" :checked="IsDark" @change="toggleDark()" class="hidden" />
 
-    <Icon class="swap-on size-8" icon="tabler:sun" />
-    <Icon class="swap-off size-8" icon="tabler:moon" />
+    <Icon class="swap-on size-8" icon="tabler:moon" />
+    <Icon class="swap-off size-8" icon="tabler:sun" />
   </label>
 </template>

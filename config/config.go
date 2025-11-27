@@ -40,13 +40,13 @@ type AppSettings struct {
 	Title             string   `mapstructure:"title" validate:"required"`
 	AmountOfQuestions int      `mapstructure:"amount_of_questions" validate:"required,gte=1"`
 	Logo              string   `mapstructure:"logo" validate:"required,image"`
-	Languages         []string `mapstructure:"languages" validate:"dive,required,bcp47_language_tag"`
+	Languages         []string `mapstructure:"languages" validate:"dive,required,bcp47_language_tag" nullable:"false"`
 }
 
 type QuestionSetting struct {
 	ID            int                 `mapstructure:"id" validate:"min=0"`
 	Question      map[string]string   `mapstructure:"question" validate:"dive,required"`
-	Answers       map[string][]string `mapstructure:"answers" validate:"dive,dive,required" nullable:"false"`
+	Answers       map[string][]string `mapstructure:"answers" validate:"dive,dive,required"`
 	CorrectAnswer int                 `mapstructure:"correct_answer" validate:"min=1,max=3"`
 }
 
@@ -60,7 +60,7 @@ type Quiz struct {
 type QuestionAndAnswer struct {
 	ID       int      `json:"id"`
 	Question string   `json:"question"`
-	Answers  []string `json:"answers"`
+	Answers  []string `json:"answers" nullable:"false"`
 	Answer   *int     `json:"answer,omitempty"`
 	Correct  *bool    `json:"correct,omitempty"`
 }
