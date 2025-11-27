@@ -25,32 +25,32 @@ var validate *validator.Validate
 var mu sync.RWMutex
 
 type Config struct {
-	LogLevel  string            `mapstructure:"log_level" validate:"omitempty,oneof=debug info warn error"`
-	TimeZone  string            `mapstructure:"time_zone" validate:"omitempty,timezone"`
-	Server    ServerSettings    `mapstructure:"server"`
-	App       AppSettings       `mapstructure:"app"`
-	Questions []QuestionSetting `mapstructure:"questions" validate:"dive"`
+	LogLevel  string            `mapstructure:"log_level" yaml:"log_level" validate:"omitempty,oneof=debug info warn error"`
+	TimeZone  string            `mapstructure:"time_zone" yaml:"time_zone" validate:"omitempty,timezone"`
+	Server    ServerSettings    `mapstructure:"server" yaml:"server"`
+	App       AppSettings       `mapstructure:"app" yaml:"app"`
+	Questions []QuestionSetting `mapstructure:"questions" yaml:"questions" validate:"dive"`
 }
 
 type ServerSettings struct {
-	Address string `mapstructure:"address" validate:"required,ipv4"`
-	Port    int    `mapstructure:"port" validate:"required,gte=1024,lte=65535"`
+	Address string `mapstructure:"address" yaml:"address" validate:"required,ipv4"`
+	Port    int    `mapstructure:"port" yaml:"port" validate:"required,gte=1024,lte=65535"`
 }
 
 type AppSettings struct {
-	Title             string            `mapstructure:"title" validate:"required"`
-	AmountOfQuestions int               `mapstructure:"amount_of_questions" validate:"required,gte=1"`
-	Logo              string            `mapstructure:"logo" validate:"required,image"`
-	Languages         []string          `mapstructure:"languages" validate:"dive,required,bcp47_language_tag" nullable:"false"`
-	CSSVariables      map[string]string `mapstructure:"css_variables" validate:"dive,required,hexcolor" nullable:"false"`
-	Icons             map[string]string `mapstructure:"icons" validate:"required,dive,required,svg" nullable:"false"`
+	Title             string            `mapstructure:"title" yaml:"title" validate:"required"`
+	AmountOfQuestions int               `mapstructure:"amount_of_questions" yaml:"amount_of_questions" validate:"required,gte=1"`
+	Logo              string            `mapstructure:"logo" yaml:"logo" validate:"required,image"`
+	Languages         []string          `mapstructure:"languages" yaml:"languages" validate:"dive,required,bcp47_language_tag" nullable:"false"`
+	CSSVariables      map[string]string `mapstructure:"css_variables" yaml:"css_variables" validate:"dive,required,hexcolor" nullable:"false"`
+	Icons             map[string]string `mapstructure:"icons" yaml:"icons" validate:"required,dive,required,svg" nullable:"false"`
 }
 
 type QuestionSetting struct {
-	ID            int                 `mapstructure:"id" validate:"min=0"`
-	Question      map[string]string   `mapstructure:"question" validate:"dive,required"`
-	Answers       map[string][]string `mapstructure:"answers" validate:"dive,dive,required"`
-	CorrectAnswer int                 `mapstructure:"correct_answer" validate:"min=1,max=3"`
+	ID            int                 `mapstructure:"id" yaml:"id" validate:"min=0"`
+	Question      map[string]string   `mapstructure:"question" yaml:"question" validate:"dive,required"`
+	Answers       map[string][]string `mapstructure:"answers" yaml:"answers" validate:"dive,dive,required"`
+	CorrectAnswer int                 `mapstructure:"correct_answer" yaml:"correct_answer" validate:"min=1,max=3"`
 }
 
 type Quiz struct {
@@ -104,7 +104,7 @@ func New() {
 		"restart":  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M0 224c0 17.7 14.3 32 32 32s32-14.3 32-32c0-53 43-96 96-96h160v32c0 12.9 7.8 24.6 19.8 29.6s25.7 2.2 34.9-6.9l64-64c12.5-12.5 12.5-32.8 0-45.3l-64-64c-9.2-9.2-22.9-11.9-34.9-6.9S320 19.1 320 32v32H160C71.6 64 0 135.6 0 224m512 64c0-17.7-14.3-32-32-32s-32 14.3-32 32c0 53-43 96-96 96H192v-32c0-12.9-7.8-24.6-19.8-29.6s-25.7-2.2-34.9 6.9l-64 64c-12.5 12.5-12.5 32.8 0 45.3l64 64c9.2 9.2 22.9 11.9 34.9 6.9s19.8-16.6 19.8-29.6v-32h160c88.4 0 160-71.6 160-160z"/></svg>`,
 	})
 
-	viper.SetDefault("quiz", []QuestionSetting{
+	viper.SetDefault("questions", []QuestionSetting{
 		{
 			ID: 1,
 			Question: map[string]string{

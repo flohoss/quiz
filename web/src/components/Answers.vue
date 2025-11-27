@@ -10,11 +10,11 @@ function getButtonClass(index: number) {
   const correct = props.question.correct;
 
   if (submitted.value && correct === index + 1) {
-    return 'bg-success text-success-content ring-success font-bold border-2 border-success';
+    return 'bg-success text-success-content ring-success font-bold';
   }
 
   if (submitted.value && selected && correct !== index + 1) {
-    return 'bg-error text-error-content ring-error border-2 border-error';
+    return 'bg-error text-error-content ring-error';
   }
 
   if (!submitted.value && selected) {
