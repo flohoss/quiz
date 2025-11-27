@@ -1,0 +1,50 @@
+ARG V_GOLANG=1.25.3
+ARG V_NODE=25
+ARG V_ALPINE=3
+FROM alpine:${V_ALPINE} AS logo
+WORKDIR /app
+RUN apk add figlet > /dev/null 2>&1
+RUN figlet Quiz > logo.txt
+
+FROM golang:${V_GOLANG}-alpine AS golang-builder
+WORKDIR /app
+
+COPY ./go.mod ./go.sum ./
+RUN go mod download > /dev/null 2>&1
+
+COPY . .
+RUN go build -o quiz .
+
+FROM node:${V_NODE}-alpine AS node-builder
+WORKDIR /app
+
+COPY ./web/package.json ./web/yarn.lock ./
+RUN yarn install --frozen-lockfile --network-timeout 30000 --silent
+
+COPY ./web/openapi.json ./web/openapi-ts.config.ts ./
+RUN yarn types
+
+COPY ./web/ ./
+RUN yarn build
+
+FROM golang:${V_GOLANG}-alpine AS final
+RUN apk add --update --no-cache dumb-init && \
+    rm -rf /tmp/* /var/tmp/* /usr/share/man /var/cache/apk/*
+
+WORKDIR /app
+
+COPY --from=logo /app/logo.txt .
+COPY --from=golang-builder /app/quiz .
+COPY --from=node-builder /app/dist/ ./web/
+COPY ./docker/entrypoint.sh .
+
+EXPOSE 8156
+
+ARG APP_VERSION
+ENV APP_VERSION=$APP_VERSION
+ARG BUILD_TIME
+ENV BUILD_TIME=$BUILD_TIME
+ARG REPO
+ENV REPO=$REPO
+
+ENTRYPOINT ["dumb-init", "--", "/app/docker/dev.entrypoint.sh"]

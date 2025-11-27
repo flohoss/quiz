@@ -1,0 +1,270 @@
+time_zone: 'Europe/Berlin'
+log_level: 'info'
+
+server:
+  address: '0.0.0.0'
+  port: 8156
+
+app:
+  title: 'Christmas Quiz'
+  amount_of_questions: 5
+  logo: '/app/config/logo.svg'
+  languages:
+    - 'en'
+    - 'de'
+  css_variables:
+    --color-primary: '#294221'
+    --color-primary-content: '#ffffff'
+    --color-secondary: '#ac3e31'
+    --color-secondary-content: '#ffffff'
+    --color-success: '#294221'
+    --color-success-content: '#ffffff'
+    --color-error: '#ac3e31'
+    --color-error-content: '#ffffff'
+  icons:
+    next: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M480 96c17.7 0 32 14.3 32 32s-14.3 32-32 32H272V96zM320 288c17.7 0 32 14.3 32 32s-14.3 32-32 32h-64c-17.7 0-32-14.3-32-32s14.3-32 32-32zm64-64c0 17.7-14.3 32-32 32h-48c-17.7 0-32-14.3-32-32s14.3-32 32-32h48c17.7 0 32 14.3 32 32m-96 160c17.7 0 32 14.3 32 32s-14.3 32-32 32h-64c-17.7 0-32-14.3-32-32s14.3-32 32-32zm-88-96h.6c-5.4 9.4-8.6 20.3-8.6 32c0 13.2 4 25.4 10.8 35.6c-24.9 8.7-42.8 32.5-42.8 60.4c0 11.7 3.1 22.6 8.6 32H160C71.6 448 0 376.4 0 288v-61.7c0-42.4 16.9-83.1 46.9-113.1l11.6-11.6C82.5 77.5 115.1 64 149 64h27c35.3 0 64 28.7 64 64v88c0 22.1-17.9 40-40 40s-40-17.9-40-40v-56c0-8.8-7.2-16-16-16s-16 7.2-16 16v56c0 39.8 32.2 72 72 72"/></svg>'
+    previous: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 96c-17.7 0-32 14.3-32 32s14.3 32 32 32h208V96zm160 192c-17.7 0-32 14.3-32 32s14.3 32 32 32h64c17.7 0 32-14.3 32-32s-14.3-32-32-32zm-64-64c0 17.7 14.3 32 32 32h48c17.7 0 32-14.3 32-32s-14.3-32-32-32h-48c-17.7 0-32 14.3-32 32m96 160c-17.7 0-32 14.3-32 32s14.3 32 32 32h64c17.7 0 32-14.3 32-32s-14.3-32-32-32zm88-96h-.6c5.4 9.4 8.6 20.3 8.6 32c0 13.2-4 25.4-10.8 35.6c24.9 8.7 42.8 32.5 42.8 60.4c0 11.7-3.1 22.6-8.6 32h8.6c88.4 0 160-71.6 160-160v-61.7c0-42.4-16.9-83.1-46.9-113.1l-11.6-11.6C429.5 77.5 396.9 64 363 64h-27c-35.3 0-64 28.7-64 64v88c0 22.1 17.9 40 40 40s40-17.9 40-40v-56c0-8.8 7.2-16 16-16s16 7.2 16 16v56c0 39.8-32.2 72-72 72"/></svg>'
+    submit: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><path fill="currentColor" d="M32 32C14.3 32 0 46.3 0 64s14.3 32 32 32v160c0 53 43 96 96 96v32h64v-32h192v32h64v-32c53 0 96-43 96-96v-96c17.7 0 32-14.3 32-32s-14.3-32-32-32h-64c-17.7 0-32 14.3-32 32v41.3c0 30.2-24.5 54.7-54.7 54.7c-75.5 0-145.6-38.9-185.6-102.9l-4.3-6.9C174.2 67.6 125 37.6 70.7 32.7c-2.2-.5-4.4-.7-6.7-.7zm608 352c0-17.7-14.3-32-32-32s-32 14.3-32 32v8c0 13.3-10.7 24-24 24H64c-17.7 0-32 14.3-32 32s14.3 32 32 32h488c48.6 0 88-39.4 88-88z"/></svg>'
+    restart: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M0 224c0 17.7 14.3 32 32 32s32-14.3 32-32c0-53 43-96 96-96h160v32c0 12.9 7.8 24.6 19.8 29.6s25.7 2.2 34.9-6.9l64-64c12.5-12.5 12.5-32.8 0-45.3l-64-64c-9.2-9.2-22.9-11.9-34.9-6.9S320 19.1 320 32v32H160C71.6 64 0 135.6 0 224m512 64c0-17.7-14.3-32-32-32s-32 14.3-32 32c0 53-43 96-96 96H192v-32c0-12.9-7.8-24.6-19.8-29.6s-25.7-2.2-34.9 6.9l-64 64c-12.5 12.5-12.5 32.8 0 45.3l64 64c9.2 9.2 22.9 11.9 34.9 6.9s19.8-16.6 19.8-29.6v-32h160c88.4 0 160-71.6 160-160z"/></svg>'
+
+questions:
+  - id: 1
+    question:
+      en: 'How many doors does an Advent calendar have?'
+      de: 'Wie viele Türchen hat ein Adventskalender?'
+    answers:
+      en: ['17', '24', '30']
+      de: ['17', '24', '30']
+    correct_answer: 2
+  - id: 2
+    question:
+      en: 'What is celebrated at Christmas?'
+      de: 'Was wird an Weihnachten gefeiert?'
+    answers:
+      en: ['Angels getting married', 'Reindeer having birthdays', 'The birth of Jesus Christ']
+      de: ['Die Engel heiraten', 'Die Rentiere haben Geburtstag', 'Die Geburt von Jesus Christus']
+    correct_answer: 3
+  - id: 3
+    question:
+      en: 'What does Santa bring to naughty children?'
+      de: 'Was bringt der Weihnachtsmann den unartigen Kindern?'
+    answers:
+      en: ['A rod/switch', 'Hard nuts', 'Cookies']
+      de: ['Eine Rute', 'Harte Nüsse', 'Kekse']
+    correct_answer: 1
+  - id: 4
+    question:
+      en: "Which animals pull Santa's sleigh?"
+      de: 'Welche Tiere ziehen den Schlitten vom Weihnachtsmann?'
+    answers:
+      en: ['Huskies', 'Horses', 'Reindeer']
+      de: ['Huskies', 'Pferde', 'Rentiere']
+    correct_answer: 3
+  - id: 5
+    question:
+      en: "Which animals were in the stable of the baby Jesus' manger?"
+      de: 'Welche Tiere standen im Stall der Krippe des Jesuskindes?'
+    answers:
+      en: ['Ox and donkey', 'Cow and camel', 'Dog and cat']
+      de: ['Ochs und Esel', 'Kuh und Kamel', 'Hund und Katze']
+    correct_answer: 1
+  - id: 6
+    question:
+      en: 'What are the names of the three wise men?'
+      de: 'Wie heißen die Heiligen drei Könige?'
+    answers:
+      en: ['Nicholas, Matthew and Joseph', 'Caspar, Melchior and Balthasar', 'Andreas, Augustus and Abraham']
+      de: ['Nikolaus, Matthäus und Joseph', 'Caspar, Melchior und Balthasar', 'Andreas, Augustus und Abraham']
+    correct_answer: 2
+  - id: 7
+    question:
+      en: 'Knecht Ruprecht is...'
+      de: 'Knecht Ruprecht ist...'
+    answers:
+      en: ["St. Nicholas' helper", 'A mean adversary of Santa', 'An invention by Christian Andersen in a fairy tale']
+      de: ['Der Gehilfe des Nikolaus', 'Ein fieser Widersacher des Weihnachtsmannes', 'Eine Erfindung von Christian Andersen in einem Märchen']
+    correct_answer: 1
+  - id: 8
+    question:
+      en: 'How many needles does an average (1.70m tall) Christmas tree have?'
+      de: 'Wie viele Nadeln hat ein durchschnittlicher (1,70 m großer) Weihnachtsbaum?'
+    answers:
+      en: ['470,000', '690,000', '180,000']
+      de: ['470.000', '690.000', '180.000']
+    correct_answer: 3
+  - id: 9
+    question:
+      en: 'What do the British call the second day of Christmas (December 26th)?'
+      de: 'Wie nennen die Briten den 2. Weihnachtstag (26.12.)?'
+    answers:
+      en: ['Boxing Day', 'Reindeer Day', 'Santa Day']
+      de: ['Boxing Day', 'Rendeer Day', 'Santa Day']
+    correct_answer: 1
+  - id: 10
+    question:
+      en: 'Who invented the Advent calendar?'
+      de: 'Wer hat den Adventskalender erfunden?'
+    answers:
+      en: ['The Romans around 400 AD', 'An English pastor in the 19th century', 'The chocolate industry in the 20th century']
+      de: ['Die Römer etwa 400 n. Chr.', 'Ein englischer Pfarrer im 19. Jahrhundert', 'Die Schokoladenindustrie im 20. Jahrhundert']
+    correct_answer: 2
+  - id: 11
+    question:
+      en: 'Who distributes gifts in Iceland?'
+      de: 'Wer verteilt in Island die Geschenke?'
+    answers:
+      en: ['The 13 Christmas trolls called Jólasveinar', 'Santa called Jólasveinn', 'The 21 volcano elves called Eldfjallálfar']
+      de: ['Die 13 Weihnachtstrolle, genannt Jólasveinar', 'Der Weihnachtsmann, genannt Jólasveinn', 'Die 21 Vulkanelfen, genannt Eldfjallálfar']
+    correct_answer: 1
+  - id: 12
+    question:
+      en: "Who composed the song 'White Christmas'?"
+      de: "Wer hat das Lied 'White Christmas' komponiert?"
+    answers:
+      en: ['Johnny Cash', 'Irving Berlin', 'Nat King Cole']
+      de: ['Johnny Cash', 'Irving Berlin', 'Nat King Cole']
+    correct_answer: 2
+  - id: 13
+    question:
+      en: "What color was Santa's coat before Coca Cola dressed him in red?"
+      de: 'Welche Farbe hatte der Mantel des Weihnachtsmannes, bevor ihn Coca Cola rot einkleidete?'
+    answers:
+      en: ['White', 'Gold', 'Blue']
+      de: ['Weiß', 'Gold', 'Blau']
+    correct_answer: 3
+  - id: 14
+    question:
+      en: "Which islands don't exist?"
+      de: 'Welche Inseln gibt es nicht?'
+    answers:
+      en: ['Christmas Islands', 'Advent Islands', 'Easter Islands']
+      de: ['Weihnachtsinseln', 'Adventsinseln', 'Osterinseln']
+    correct_answer: 2
+  - id: 15
+    question:
+      en: 'When was Christmas first celebrated?'
+      de: 'Wann wurde zum ersten Mal Weihnachten gefeiert?'
+    answers:
+      en: ['In the 4th century', 'In the 15th century', "In the year 3 after Christ's birth"]
+      de: ['im 4. Jahrhundert', 'im 15. Jahrhundert', 'im Jahre 3 nach Christi Geburt']
+    correct_answer: 1
+  - id: 16
+    question:
+      en: 'Which Asian country is the only one where Christmas is a public holiday?'
+      de: 'Welches asiatische Land ist das einzige, in dem Weihnachten ein Feiertag ist?'
+    answers:
+      en: ['China', 'South Korea', 'Malaysia']
+      de: ['China', 'Südkorea', 'Malaysia']
+    correct_answer: 2
+  - id: 17
+    question:
+      en: "What does 'Merry Christmas' mean in Spanish?"
+      de: "Was heißt 'Frohe Weihnachten' auf Spanisch?"
+    answers:
+      en: ['Muchas Gracias', 'Feliz Navidad', 'Bienvenidos']
+      de: ['Muchas Gracias', 'Feliz Navidad', 'Bienvenidos']
+    correct_answer: 2
+  - id: 18
+    question:
+      en: 'What is a legendary Christmas dish from Great Britain called?'
+      de: 'Wie heißt ein legendäres Weihnachtsgericht aus Großbritannien?'
+    answers:
+      en: ['Santa Cheese Boots', 'Jelly Bag Cap Cake', 'Christmas pudding']
+      de: ['Santa Cheese Boots (Weihnachtsmann-Käse-Stiefel)', 'Jelly Bag Cap Cake (Zipfelmützenkekse)', 'Plumpudding (Weihnachtspudding)']
+    correct_answer: 3
+  - id: 19
+    question:
+      en: "What are the children looking forward to in the song 'Let us be happy and cheerful'?"
+      de: "Worauf freuen sich die Kinder im Lied 'Lasst uns froh und munter sein'?"
+    answers:
+      en: ['St. Nicholas evening', 'First Advent', 'Christmas Eve']
+      de: ['Nikolausabend', 'Erster Advent', 'Heiligabend']
+    correct_answer: 1
+  - id: 20
+    question:
+      en: "In the Christmas bakery there's..."
+      de: "In der Weihnachtsbäckerei gibt's..."
+    answers:
+      en: ['A forgotten Easter egg', 'Many a delicacy', 'A huge celebration']
+      de: ['Ein vergessenes Osterei', 'So manche Leckerei', 'Ein riesen Fest']
+    correct_answer: 2
+  - id: 21
+    question:
+      en: 'What is a nativity play?'
+      de: 'Was ist ein Krippenspiel?'
+    answers:
+      en: ['An old musical instrument', 'A play performed at Christmas', 'A Christmas board game for the whole family']
+      de: ['Ein altes Musikinstrument', 'Ein Theaterstück, das zu Weihnachten aufgeführt wird', 'Ein weihnachtliches Brettspiel für die ganze Familie']
+    correct_answer: 2
+  - id: 22
+    question:
+      en: "What's special about the Finnish Santa Joulupukki?"
+      de: 'Was ist das Besondere am finnischen Weihnachtsmann Joulupukki?'
+    answers:
+      en: ['He has no beard', 'He is married', 'He has no red coat']
+      de: ['Er hat keinen Bart', 'Er ist verheiratet', 'Er hat keinen roten Mantel']
+    correct_answer: 2
+  - id: 23
+    question:
+      en: 'Where does the poinsettia plant come from?'
+      de: 'Woher stammt die Pflanze Weihnachtsstern?'
+    answers:
+      en: ['From the Mohawk of North America', 'From the Aborigines of Australia', 'From the Aztecs of Mexico']
+      de: ['Von den Mohawk aus Nordamerika', 'Von den Aborigines aus Australien', 'Von den Azteken aus Mexiko']
+    correct_answer: 3
+  - id: 24
+    question:
+      en: 'In Finland, children run from house to house before Christmas dressed as...'
+      de: 'In Finnland laufen die Kinder vor Weihnachten von Haus zu Haus. Dabei verkleiden sie sich als...'
+    answers:
+      en: ['Elves', 'Reindeer', 'Santa']
+      de: ['Elf/e', 'Rentier', 'Weihnachtsmann']
+    correct_answer: 1
+  - id: 25
+    question:
+      en: "Where did the idea for the song 'Rudolph The Red-Nosed Reindeer' come from?"
+      de: "Woher kam die Idee zum Lied 'Rudolph The Red Nose Reindeer'?"
+    answers:
+      en: ['From the eighth American President Martin van Buren', 'From composer Johnny Marks', "From a children's coloring book"]
+      de: ['Vom achten amerikanischen Präsidenten Martin van Buren', 'Vom Komponisten Johnny Marks', 'Aus einem Kindermalbuch']
+    correct_answer: 3
+  - id: 26
+    question:
+      en: 'Where does the Christmas Child come from?'
+      de: 'Woher kommt das weihnachtliche Christkind?'
+    answers:
+      en: ['Martin Luther introduced it in the 16th century', 'It comes from Christmas customs in Scandinavia', "It's an invention by Walt Disney"]
+      de: ['Martin Luther führte es im 16. Jahrhundert ein', 'Es stammt aus den Weihnachtsbräuchen in Skandinavien', 'Es ist eine Erfindung von Walt Disney']
+    correct_answer: 1
+  - id: 27
+    question:
+      en: 'What is marzipan made from?'
+      de: 'Woraus wird Marzipan gemacht?'
+    answers:
+      en: ['Walnuts', 'Dates', 'Almonds']
+      de: ['Walnüsse', 'Datteln', 'Mandeln']
+    correct_answer: 3
+  - id: 28
+    question:
+      en: 'How many Christmas songs are there approximately according to the Office for Christmas Songs in Graz?'
+      de: 'Wie viele Weihnachtslieder gibt es ungefähr laut dem Büro für Weihnachtslieder in Graz?'
+    answers:
+      en: ['30,000', '3,000', '300']
+      de: ['30.000', '3.000', '300']
+    correct_answer: 1
+  - id: 29
+    question:
+      en: 'How many candles did the Advent wreath have when it was invented?'
+      de: 'Wie viele Kerzen hatte der Adventskranz bei seiner Erfindung?'
+    answers:
+      en: ['23', 'It was always 4 from the beginning', '1, in rare cases 2']
+      de: ['23', 'Von Anfang an waren es 4', '1, in seltenen Fällen 2']
+    correct_answer: 1
+  - id: 30
+    question:
+      en: 'What percentage of alcohol must mulled wine contain in Germany to be called mulled wine?'
+      de: 'Wie viel Prozent Alkohol muss Glühwein in Deutschland mind. enthalten, um ihn Glühwein nennen zu dürfen?'
+    answers:
+      en: ['12%', '7%', 'There is no regulation for this']
+      de: ['12%', '7%', 'Es gibt hierfür keine Vorschrift']
+    correct_answer: 2

@@ -1,0 +1,27 @@
+@import 'tailwindcss';
+@plugin "daisyui";
+
+@plugin 'daisyui/theme' {
+    name: corporate;
+    default: true;
+    prefersdark: false;
+}
+
+@plugin 'daisyui/theme' {
+    name: business;
+    default: false;
+    prefersdark: true;
+}
+
+@utility container {
+    margin-inline: auto;
+    padding: 2rem 1rem;
+}
+
+@utility nav-btn {
+    @apply btn btn-square btn-lg;
+}
+
+@utility hover {
+    @apply hover:cursor-pointer hover:bg-primary hover:text-primary-content;
+}
