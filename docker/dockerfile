@@ -13,7 +13,7 @@ COPY ./go.mod ./go.sum ./
 RUN go mod download > /dev/null 2>&1
 
 COPY . .
-RUN go build -o quiz .
+RUN CGO_ENABLED=0 go build -ldflags="-s -w" -o quiz .
 
 FROM node:${V_NODE}-alpine AS node-builder
 WORKDIR /app
@@ -49,4 +49,4 @@ ENV BUILD_TIME=$BUILD_TIME
 ARG REPO
 ENV REPO=$REPO
 
-ENTRYPOINT ["dumb-init", "--", "/app/docker/dev.entrypoint.sh"]
+ENTRYPOINT ["dumb-init", "--", "/app/entrypoint.sh"]
