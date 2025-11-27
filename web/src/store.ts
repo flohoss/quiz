@@ -25,22 +25,13 @@ export const useGlobalState = createGlobalState(() => {
 
   async function loadQuiz() {
     loading.value = true;
-    const startTime = Date.now();
     const resp = await getQuestions({ query: { language: lang } });
-    const elapsed = Date.now() - startTime;
     if (resp.error || !resp.data) {
       loading.value = false;
       return;
     }
     quiz.value = resp.data;
-
-    if (elapsed < 500) {
-      setTimeout(() => {
-        loading.value = false;
-      }, 500 - elapsed);
-    } else {
-      loading.value = false;
-    }
+    loading.value = false;
   }
   loadQuiz();
 

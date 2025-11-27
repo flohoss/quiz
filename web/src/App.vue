@@ -3,8 +3,7 @@ import HeroCard from './components/HeroCard.vue';
 import Navigation from './components/Navigation.vue';
 import { useGlobalState } from './store';
 import QuestionAndAnswers from './components/QuestionAndAnswers.vue';
-import { UI } from './main';
-import LoadingDots from './components/LoadingDots.vue';
+import { Setting, BackendURL } from './main';
 
 const { quiz, question, loading, submitted } = useGlobalState();
 </script>
@@ -12,7 +11,7 @@ const { quiz, question, loading, submitted } = useGlobalState();
 <template>
   <HeroCard>
     <template v-slot:header>
-      <div class="flex justify-center h-16" v-html="UI.data?.Logo"></div>
+      <div class="flex justify-center h-16 bg-auto bg-center bg-no-repeat" :style="`background-image: url(${BackendURL + Setting.data?.Logo})`"></div>
     </template>
     <div class="relative w-full h-full min-h-[200px]">
       <div v-if="submitted" class="grid gap-8 lg:gap-12">
@@ -20,7 +19,6 @@ const { quiz, question, loading, submitted } = useGlobalState();
       </div>
       <Transition v-else name="crossfade" mode="out-in" appear>
         <QuestionAndAnswers v-if="!loading && question" :question="question" key="question" />
-        <LoadingDots v-else />
       </Transition>
     </div>
     <template v-slot:footer>
