@@ -22,6 +22,7 @@ export const useGlobalState = createGlobalState(() => {
   const end = computed(() => index.value === quiz.value.total);
   const submitted = shallowRef(false);
   const loading = shallowRef(true);
+  const direction = shallowRef<'forward' | 'backward'>('forward');
 
   async function loadQuiz() {
     loading.value = true;
@@ -37,12 +38,14 @@ export const useGlobalState = createGlobalState(() => {
 
   function nextIndex() {
     if (!end.value) {
+      direction.value = 'forward';
       index.value += 1;
     }
   }
 
   function previousIndex() {
     if (index.value > 1) {
+      direction.value = 'backward';
       index.value -= 1;
     }
   }
@@ -72,5 +75,5 @@ export const useGlobalState = createGlobalState(() => {
     submitted.value = false;
   }
 
-  return { quiz, index, question, start, end, submitted, loading, nextIndex, previousIndex, handleAnswerSelected, submit, reset };
+  return { quiz, index, question, start, end, submitted, loading, direction, nextIndex, previousIndex, handleAnswerSelected, submit, reset };
 });
