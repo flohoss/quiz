@@ -65,7 +65,7 @@ type QuestionAndAnswer struct {
 	Question string   `json:"question"`
 	Answers  []string `json:"answers" nullable:"false"`
 	Answer   *int     `json:"answer,omitempty"`
-	Correct  *int     `json:"correct,omitempty"`
+	Correct  int      `json:"correct"`
 }
 
 func init() {
@@ -240,6 +240,7 @@ func ValidateQuizAnswers(answers []QuizAnswer, lang string) (Quiz, error) {
 		Questions: make([]QuestionAndAnswer, 0, len(answers)),
 		Total:     len(answers),
 		Correct:   new(int),
+		Wrong:     new(int),
 	}
 
 	for _, answer := range answers {
@@ -261,11 +262,10 @@ func ValidateQuizAnswers(answers []QuizAnswer, lang string) (Quiz, error) {
 			return quiz, fmt.Errorf("invalid answer index %d for question %d", answer.Answer, answer.ID)
 		}
 
-		var correctPtr *int
 		if answer.Answer == foundQuestion.CorrectAnswer {
 			*quiz.Correct++
 		} else {
-			correctPtr = &foundQuestion.CorrectAnswer
+			*quiz.Wrong++
 		}
 
 		question := QuestionAndAnswer{
@@ -273,7 +273,7 @@ func ValidateQuizAnswers(answers []QuizAnswer, lang string) (Quiz, error) {
 			Answer:   &answer.Answer,
 			Question: foundQuestion.Question[lang],
 			Answers:  answers,
-			Correct:  correctPtr,
+			Correct:  foundQuestion.CorrectAnswer,
 		}
 
 		quiz.Questions = append(quiz.Questions, question)

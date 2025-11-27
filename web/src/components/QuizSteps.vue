@@ -41,25 +41,33 @@ function scrollToActive() {
 
 onMounted(scrollToActive);
 watch(index, scrollToActive);
+
+function getStepClass(i: number) {
+  const question = quiz.value.questions[i];
+  const step = steps.value[i];
+
+  if (!question || !step) {
+    return '';
+  }
+
+  const answered = step.answered;
+  const isCurrent = index.value === i + 1;
+
+  if (!submitted.value) {
+    return isCurrent ? 'step-primary' : '';
+  }
+
+  if (!answered) {
+    return 'step-neutral opacity-60';
+  }
+
+  return question.answer === question.correct ? 'step-success' : 'step-error';
+}
 </script>
 
 <template>
   <div ref="stepsContainer" class="steps w-full overflow-x-auto whitespace-nowrap scrollbar-hide" :class="{ 'pointer-events-none select-none': !submitted }">
-    <div
-      v-for="(step, i) in steps"
-      :key="step.id"
-      class="step px-2"
-      :class="[
-        'cursor-pointer',
-        { 'pointer-events-none select-none': !submitted },
-        { 'step-primary': !submitted && index === i + 1 },
-        { 'step-success': submitted && quiz.questions[i]?.correct === undefined },
-        { 'step-error': submitted && quiz.questions[i]?.correct !== undefined },
-        { 'step-secondary': submitted && quiz.questions[i]?.correct == null && step.answered },
-        { step: !step.answered && (!submitted || quiz.questions[i]?.correct == null) },
-      ]"
-      @click="goToStep(i)"
-    ></div>
+    <div v-for="(step, i) in steps" :key="step.id" class="step px-2 cursor-pointer" :class="getStepClass(i)" @click="goToStep(i)"></div>
   </div>
 </template>
 

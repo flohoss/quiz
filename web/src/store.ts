@@ -36,6 +36,11 @@ export const useGlobalState = createGlobalState(() => {
   }
   loadQuiz();
 
+  function firstPage() {
+    direction.value = 'backward';
+    index.value = 1;
+  }
+
   function nextIndex() {
     if (!end.value) {
       direction.value = 'forward';
@@ -58,6 +63,8 @@ export const useGlobalState = createGlobalState(() => {
   }
 
   function submit() {
+    submitted.value = true;
+    firstPage();
     const answers = quiz.value.questions.filter((q) => typeof q.answer === 'number').map((q) => ({ id: q.id, answer: q.answer as number }));
 
     validateAnswers({ query: { language: lang }, body: answers }).then((resp) => {
@@ -65,7 +72,6 @@ export const useGlobalState = createGlobalState(() => {
         return;
       }
       quiz.value = resp.data;
-      submitted.value = true;
     });
   }
 
