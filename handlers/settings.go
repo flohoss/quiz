@@ -8,21 +8,21 @@ import (
 	"github.com/flohoss/quiz/config"
 )
 
-func getUIOperation() huma.Operation {
+func getAppOperation() huma.Operation {
 	return huma.Operation{
 		OperationID: "get-ui",
 		Method:      http.MethodGet,
 		Path:        "/api/ui",
-		Summary:     "Get UI settings",
+		Summary:     "Get App settings",
 		Tags:        []string{"Settings"},
 	}
 }
 
-func getUIHandler(ctx context.Context, input *struct {
+func getAppHandler(ctx context.Context, input *struct {
 }) (*struct {
-	Body config.UI `json:"ui"`
+	Body config.AppSettings `json:"ui"`
 }, error) {
 	return &struct {
-		Body config.UI `json:"ui"`
-	}{Body: config.GetUI()}, nil
+		Body config.AppSettings `json:"ui"`
+	}{Body: config.GetApp()}, nil
 }

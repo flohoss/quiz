@@ -1,13 +1,31 @@
 package handlers
 
 import (
+	"html/template"
+	"io"
 	"net/http"
+	"strings"
 
 	"github.com/danielgtaylor/huma/v2"
 	"github.com/danielgtaylor/huma/v2/adapters/humaecho"
 	"github.com/flohoss/quiz/config"
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
+
+type Template struct {
+	templates *template.Template
+}
+
+func (t *Template) Render(w io.Writer, name string, data interface{}, c echo.Context) error {
+	return t.templates.ExecuteTemplate(w, name, data)
+}
+
+func initTemplates() *Template {
+	return &Template{
+		templates: template.Must(template.ParseGlob("web/index.html")),
+	}
+}
 
 func longCacheLifetime(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
@@ -27,11 +45,24 @@ func languageValidationMiddleware(api huma.API) func(ctx huma.Context, next func
 	}
 }
 
-func SetupRouter(e *echo.Echo) {
-	config := huma.DefaultConfig("Quiz API", "1.0.0")
-	config.OpenAPIPath = "/api/openapi"
-	config.SchemasPath = "/api/schemas"
-	h := humaecho.New(e, config)
+func SetupRouter() *echo.Echo {
+	e := echo.New()
+
+	e.HideBanner = true
+	e.HidePort = true
+
+	e.Use(middleware.Recover())
+	e.Use(middleware.CORS())
+	e.Use(middleware.GzipWithConfig(middleware.GzipConfig{
+		Skipper: func(c echo.Context) bool {
+			return strings.Contains(c.Path(), "events")
+		},
+	}))
+
+	h := huma.DefaultConfig("Quiz API", "1.0.0")
+	h.OpenAPIPath = "/api/openapi"
+	h.SchemasPath = "/api/schemas"
+	he := humaecho.New(e, h)
 
 	e.GET("/api/docs", func(ctx echo.Context) error {
 		return ctx.HTML(http.StatusOK, `<!doctype html>
@@ -49,11 +80,15 @@ func SetupRouter(e *echo.Echo) {
 		)
 	})
 	e.Renderer = initTemplates()
-	huma.Register(h, getUIOperation(), getUIHandler)
 
-	h.UseMiddleware(languageValidationMiddleware(h))
-	huma.Register(h, getQuestionsOperation(), getQuestionsHandler)
-	huma.Register(h, validateAnswersOperation(), validateAnswersHandler)
+	huma.Register(he, getAppOperation(), getAppHandler)
+
+	he.UseMiddleware(languageValidationMiddleware(he))
+	huma.Register(he, getQuestionsOperation(), getQuestionsHandler)
+	huma.Register(he, validateAnswersOperation(), validateAnswersHandler)
+
+	logo := config.GetApp().Logo
+	e.File(logo, logo, longCacheLifetime)
 
 	e.GET("/robots.txt", func(ctx echo.Context) error {
 		return ctx.String(http.StatusOK, "User-agent: *\nDisallow: /")
@@ -68,4 +103,6 @@ func SetupRouter(e *echo.Echo) {
 	e.RouteNotFound("*", func(ctx echo.Context) error {
 		return ctx.Render(http.StatusOK, "index.html", nil)
 	})
+
+	return e
 }

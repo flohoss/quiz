@@ -24,12 +24,11 @@ var validate *validator.Validate
 var mu sync.RWMutex
 
 type Config struct {
-	LogLevel  string         `mapstructure:"log_level" validate:"omitempty,oneof=debug info warn error"`
-	TimeZone  string         `mapstructure:"time_zone" validate:"omitempty,timezone"`
-	Server    ServerSettings `mapstructure:"server"`
-	UI        UI             `mapstructure:"ui"`
-	Quiz      QuizSettings   `mapstructure:"quiz"`
-	Languages []string       `mapstructure:"-" validate:"-"`
+	LogLevel  string            `mapstructure:"log_level" validate:"omitempty,oneof=debug info warn error"`
+	TimeZone  string            `mapstructure:"time_zone" validate:"omitempty,timezone"`
+	Server    ServerSettings    `mapstructure:"server"`
+	App       AppSettings       `mapstructure:"app"`
+	Questions []QuestionSetting `mapstructure:"questions" validate:"dive"`
 }
 
 type ServerSettings struct {
@@ -37,21 +36,33 @@ type ServerSettings struct {
 	Port    int    `mapstructure:"port" validate:"required,gte=1024,lte=65535"`
 }
 
-type UI struct {
-	Title string `mapstructure:"title"`
-	Logo  string `mapstructure:"logo"`
+type AppSettings struct {
+	Title             string   `mapstructure:"title" validate:"required"`
+	AmountOfQuestions int      `mapstructure:"amount_of_questions" validate:"required,gte=1"`
+	Logo              string   `mapstructure:"logo" validate:"required,image"`
+	Languages         []string `mapstructure:"languages" validate:"dive,required,bcp47_language_tag"`
 }
 
-type QuizSettings struct {
-	AmountOfQuestions int        `mapstructure:"amount_of_questions" validate:"required,gte=1"`
-	Questions         []Question `mapstructure:"questions" validate:"required,dive"`
-}
-
-type Question struct {
+type QuestionSetting struct {
 	ID            int                 `mapstructure:"id" validate:"min=0"`
-	Question      map[string]string   `mapstructure:"question" validate:"required"`
-	Answers       map[string][]string `mapstructure:"answers" validate:"required"`
+	Question      map[string]string   `mapstructure:"question" validate:"dive,required"`
+	Answers       map[string][]string `mapstructure:"answers" validate:"dive,dive,required" nullable:"false"`
 	CorrectAnswer int                 `mapstructure:"correct_answer" validate:"min=1,max=3"`
+}
+
+type Quiz struct {
+	Questions []QuestionAndAnswer `json:"questions" nullable:"false"`
+	Correct   *int                `json:"correct,omitempty"`
+	Wrong     *int                `json:"wrong,omitempty"`
+	Total     int                 `json:"total"`
+}
+
+type QuestionAndAnswer struct {
+	ID       int      `json:"id"`
+	Question string   `json:"question"`
+	Answers  []string `json:"answers"`
+	Answer   *int     `json:"answer,omitempty"`
+	Correct  *bool    `json:"correct,omitempty"`
 }
 
 func init() {
@@ -61,10 +72,38 @@ func init() {
 
 func New() {
 	viper.SetDefault("log_level", "info")
-	viper.SetDefault("time_zone", "Etc/UTC")
+	viper.SetDefault("time_zone", "Europe/Berlin")
+
 	viper.SetDefault("server.address", "0.0.0.0")
 	viper.SetDefault("server.port", 8156)
-	viper.SetDefault("quiz.amount_of_questions", 10)
+
+	viper.SetDefault("app.title", "Quiz")
+	viper.SetDefault("app.amount_of_questions", 10)
+	viper.SetDefault("app.logo", "/app/config/logo.svg")
+	viper.SetDefault("app.languages", []string{"en", "de"})
+
+	viper.SetDefault("quiz", []QuestionSetting{
+		{
+			ID: 1,
+			Question: map[string]string{
+				"en": "What is the capital of France?",
+				"de": "Was ist die Hauptstadt von Frankreich?",
+			},
+			Answers: map[string][]string{
+				"en": {
+					"Berlin",
+					"Madrid",
+					"Paris",
+				},
+				"de": {
+					"Berlin",
+					"Madrid",
+					"Paris",
+				},
+			},
+			CorrectAnswer: 3,
+		},
+	})
 
 	viper.SetConfigName("config")
 	viper.SetConfigType("yaml")
@@ -99,21 +138,13 @@ func ValidateAndLoadConfig(v *viper.Viper) error {
 		return fmt.Errorf("configuration validation failed: %w", err)
 	}
 
-	langSet := make(map[string]struct{})
-	for _, q := range tempCfg.Quiz.Questions {
-		for lang := range q.Question {
-			langSet[lang] = struct{}{}
-		}
-	}
-	tempCfg.Languages = make([]string, 0, len(langSet))
-	for lang := range langSet {
-		tempCfg.Languages = append(tempCfg.Languages, lang)
-	}
-
-	for _, q := range tempCfg.Quiz.Questions {
-		for _, lang := range tempCfg.Languages {
+	for _, q := range tempCfg.Questions {
+		for _, lang := range tempCfg.App.Languages {
 			if _, ok := q.Question[lang]; !ok {
-				return fmt.Errorf("question id %d is missing language key: %s", q.ID, lang)
+				return fmt.Errorf("question id %d is missing question language key: %s", q.ID, lang)
+			}
+			if _, ok := q.Answers[lang]; !ok {
+				return fmt.Errorf("question id %d is missing answers language key: %s", q.ID, lang)
 			}
 		}
 	}
@@ -151,35 +182,27 @@ func GetServer() string {
 	return fmt.Sprintf("%s:%d", cfg.Server.Address, cfg.Server.Port)
 }
 
-func GetUI() UI {
+func GetApp() AppSettings {
 	mu.RLock()
 	defer mu.RUnlock()
-	return cfg.UI
+	return cfg.App
 }
 
 func ValidateLanguage(lang string) error {
 	mu.RLock()
 	defer mu.RUnlock()
-	if slices.Contains(cfg.Languages, lang) {
+	if slices.Contains(cfg.App.Languages, lang) {
 		return nil
 	}
-	return fmt.Errorf("unsupported language, supported languages are: %v", cfg.Languages)
-}
-
-type QuestionAndAnswer struct {
-	ID       int      `json:"id"`
-	Question string   `json:"question"`
-	Answers  []string `json:"answers" nullable:"false"`
-	Answer   *int     `json:"answer,omitempty"`
-	Correct  *bool    `json:"correct,omitempty"`
+	return fmt.Errorf("unsupported language, supported languages are: %v", cfg.App.Languages)
 }
 
 func GetQuiz(lang string) Quiz {
 	mu.RLock()
 	defer mu.RUnlock()
 
-	amount := min(cfg.Quiz.AmountOfQuestions, len(cfg.Quiz.Questions))
-	shuffled := shuffleQuestions(cfg.Quiz.Questions, amount)
+	amount := min(cfg.App.AmountOfQuestions, len(cfg.Questions))
+	shuffled := shuffleQuestions(cfg.Questions, amount)
 
 	quiz := Quiz{
 		Questions: make([]QuestionAndAnswer, 0, amount),
@@ -200,12 +223,6 @@ func GetQuiz(lang string) Quiz {
 	return quiz
 }
 
-type Quiz struct {
-	Questions []QuestionAndAnswer `json:"questions" nullable:"false"`
-	Correct   *int                `json:"correct,omitempty"`
-	Total     int                 `json:"total"`
-}
-
 type QuizAnswer struct {
 	ID     int `json:"id"`
 	Answer int `json:"answer"`
@@ -222,10 +239,10 @@ func ValidateQuizAnswers(answers []QuizAnswer, lang string) (Quiz, error) {
 	}
 
 	for _, answer := range answers {
-		var foundQuestion *Question
-		for j := range cfg.Quiz.Questions {
-			if cfg.Quiz.Questions[j].ID == answer.ID {
-				foundQuestion = &cfg.Quiz.Questions[j]
+		var foundQuestion *QuestionSetting
+		for j := range cfg.Questions {
+			if cfg.Questions[j].ID == answer.ID {
+				foundQuestion = &cfg.Questions[j]
 				break
 			}
 		}
@@ -259,8 +276,8 @@ func ValidateQuizAnswers(answers []QuizAnswer, lang string) (Quiz, error) {
 	return quiz, nil
 }
 
-func shuffleQuestions(questions []Question, amount int) []Question {
-	shuffled := make([]Question, len(questions))
+func shuffleQuestions(questions []QuestionSetting, amount int) []QuestionSetting {
+	shuffled := make([]QuestionSetting, len(questions))
 	copy(shuffled, questions)
 
 	rng := rand.New(rand.NewSource(time.Now().UnixNano()))
