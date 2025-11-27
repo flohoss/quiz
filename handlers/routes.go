@@ -89,6 +89,10 @@ func SetupRouter() *echo.Echo {
 
 	logo := config.GetApp().Logo
 	e.File(logo, logo, longCacheLifetime)
+	icons := config.GetApp().Icons
+	for _, path := range icons {
+		e.File(path, path, longCacheLifetime)
+	}
 
 	e.GET("/robots.txt", func(ctx echo.Context) error {
 		return ctx.String(http.StatusOK, "User-agent: *\nDisallow: /")

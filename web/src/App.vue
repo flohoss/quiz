@@ -3,21 +3,22 @@ import HeroCard from './components/HeroCard.vue';
 import Navigation from './components/Navigation.vue';
 import { useGlobalState } from './store';
 import QuestionAndAnswers from './components/QuestionAndAnswers.vue';
-import { Setting, BackendURL } from './main';
+import { BackendURL, AppSetting } from './main';
+import QuizSteps from './components/QuizSteps.vue';
 
-const { quiz, question, loading, submitted, direction } = useGlobalState();
+const { question, loading, direction } = useGlobalState();
 </script>
 
 <template>
   <HeroCard>
     <template v-slot:header>
-      <div class="flex justify-center h-16 bg-auto bg-center bg-no-repeat" :style="`background-image: url(${BackendURL + Setting.data?.Logo})`"></div>
+      <div class="flex flex-col items-center w-full gap-5">
+        <div class="flex justify-center h-16 bg-auto bg-center bg-no-repeat w-full" :style="`background-image: url(${BackendURL + AppSetting.Logo})`"></div>
+        <QuizSteps class="mt-2 w-full" />
+      </div>
     </template>
     <div class="relative w-full h-full min-h-[200px] overflow-x-hidden">
-      <div v-if="submitted" class="grid gap-8 lg:gap-12">
-        <QuestionAndAnswers v-for="question in quiz.questions" :question="question" :key="question.id" />
-      </div>
-      <Transition v-else :name="direction === 'backward' ? 'swipe-right' : 'swipe-left'" mode="out-in" appear>
+      <Transition :name="direction === 'backward' ? 'swipe-right' : 'swipe-left'" mode="out-in" appear>
         <QuestionAndAnswers v-if="!loading && question" :question="question" :key="question.id" />
       </Transition>
     </div>

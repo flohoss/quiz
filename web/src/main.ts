@@ -22,6 +22,8 @@ if (Setting.error || !Setting.data) {
   throw new Error('Failed to load app settings');
 }
 
+export const AppSetting = Setting.data;
+
 document.title = Setting.data.Title;
 
 if (Setting.data.CSSVariables) {

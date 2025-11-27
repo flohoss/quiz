@@ -5,6 +5,7 @@ import (
 	"log/slog"
 	"math/rand"
 	"os"
+	"regexp"
 	"slices"
 	"strings"
 	"sync"
@@ -41,7 +42,8 @@ type AppSettings struct {
 	AmountOfQuestions int               `mapstructure:"amount_of_questions" validate:"required,gte=1"`
 	Logo              string            `mapstructure:"logo" validate:"required,image"`
 	Languages         []string          `mapstructure:"languages" validate:"dive,required,bcp47_language_tag" nullable:"false"`
-	CSSVariables      map[string]string `mapstructure:"css_variables" validate:"dive,required"`
+	CSSVariables      map[string]string `mapstructure:"css_variables" validate:"dive,required,hexcolor" nullable:"false"`
+	Icons             map[string]string `mapstructure:"icons" validate:"required,dive,required,svg" nullable:"false"`
 }
 
 type QuestionSetting struct {
@@ -69,6 +71,7 @@ type QuestionAndAnswer struct {
 func init() {
 	os.Mkdir(ConfigFolder, os.ModePerm)
 	validate = validator.New()
+	validate.RegisterValidation("svg", isSVGString)
 }
 
 func New() {
@@ -293,4 +296,10 @@ func shuffleQuestions(questions []QuestionSetting, amount int) []QuestionSetting
 	}
 
 	return shuffled[:amount]
+}
+
+func isSVGString(fl validator.FieldLevel) bool {
+	value := fl.Field().String()
+	matched, _ := regexp.MatchString(`(?s)^\s*<svg[\s\S]*?</svg>\s*$`, value)
+	return matched
 }
