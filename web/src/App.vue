@@ -12,18 +12,18 @@ const { question, loading, direction } = useGlobalState();
 <template>
   <HeroCard>
     <template v-slot:header>
-      <div class="flex flex-col items-center w-full gap-5">
+      <div class="flex flex-col items-center w-full gap-5 py-3 sm:py-4">
         <div class="flex justify-center h-16 bg-auto bg-center bg-no-repeat w-full" :style="`background-image: url(${BackendURL + AppSetting.Logo})`"></div>
         <QuizSteps class="mt-2 w-full" />
       </div>
     </template>
-    <div class="relative w-full h-full min-h-[200px] overflow-x-hidden">
+    <div class="relative w-full h-full overflow-hidden p-3 sm:p-4">
       <Transition :name="direction === 'backward' ? 'swipe-right' : 'swipe-left'" mode="out-in" appear>
         <QuestionAndAnswers v-if="!loading && question" :question="question" :key="question.id" />
       </Transition>
     </div>
     <template v-slot:footer>
-      <Navigation />
+      <Navigation class="p-3 sm:p-4" />
     </template>
   </HeroCard>
 </template>

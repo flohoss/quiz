@@ -9,19 +9,19 @@ const { start, end, question, submitted, colorless, previousIndex, nextIndex, su
 <template>
   <div class="flex justify-between">
     <button @click="previousIndex" :disabled="start || submitted" class="nav-btn btn-secondary">
-      <div class="size-6" v-html="AppSetting.Icons['previous']"></div>
+      <div class="size-8" v-html="AppSetting.Icons['previous']"></div>
     </button>
     <div class="flex items-center gap-5">
       <ThemeChanger />
     </div>
     <button v-if="end && !submitted" :disabled="!question?.answer" @click="submit" class="nav-btn btn-primary">
-      <div class="size-6" v-html="AppSetting.Icons['submit']"></div>
+      <div class="size-8" v-html="AppSetting.Icons['submit']"></div>
     </button>
     <button v-else-if="!submitted" :disabled="!question?.answer" @click="nextIndex" class="nav-btn btn-primary">
-      <div class="size-6" v-html="AppSetting.Icons['next']"></div>
+      <div class="size-8" v-html="AppSetting.Icons['next']"></div>
     </button>
     <button v-else @click="reset" :disabled="colorless" class="nav-btn btn-secondary">
-      <div class="size-6" v-html="AppSetting.Icons['restart']"></div>
+      <div class="size-8" v-html="AppSetting.Icons['restart']"></div>
     </button>
   </div>
 </template>

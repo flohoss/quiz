@@ -18,7 +18,7 @@
 }
 
 @utility nav-btn {
-    @apply btn btn-square btn-lg;
+    @apply btn btn-square btn-xl;
 }
 
 @utility hover {
