@@ -10,15 +10,15 @@ function getButtonClass(index: number) {
   const correct = props.question.correct;
 
   if (submitted.value && correct === index + 1) {
-    return 'bg-success text-success-content ring-success font-bold';
+    return 'bg-success text-success-content font-bold';
   }
 
   if (submitted.value && selected && correct !== index + 1) {
-    return 'bg-error text-error-content ring-error';
+    return 'bg-error text-error-content';
   }
 
   if (!submitted.value && selected) {
-    return 'bg-secondary text-secondary-content ring-secondary';
+    return 'bg-secondary text-secondary-content';
   }
 
   if (submitted.value) {
@@ -30,11 +30,11 @@ function getButtonClass(index: number) {
 </script>
 
 <template>
-  <div class="grid gap-4 px-5">
+  <div class="grid gap-4">
     <button
       v-for="(answer, index) in question.answers"
       :key="`${question.id}-${index + 1}`"
-      class="transition-all duration-200 rounded-lg px-5 py-3 w-full text-lg font-medium shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2"
+      class="transition-all duration-200 rounded-lg px-5 py-3 w-full lg:text-lg shadow-sm focus:outline-none cursor-pointer"
       :class="getButtonClass(index)"
       :disabled="submitted"
       @click="handleAnswerSelected(question.id, index + 1)"
