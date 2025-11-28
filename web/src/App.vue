@@ -6,7 +6,7 @@ import QuestionAndAnswers from './components/QuestionAndAnswers.vue';
 import { BackendURL, AppSetting } from './main';
 import QuizSteps from './components/QuizSteps.vue';
 
-const { question, loading, direction } = useGlobalState();
+const { question, loading, direction, submitted } = useGlobalState();
 </script>
 
 <template>
@@ -17,10 +17,15 @@ const { question, loading, direction } = useGlobalState();
         <QuizSteps class="mt-2 w-full" />
       </div>
     </template>
-    <div class="relative w-full h-full overflow-hidden p-3 sm:p-4">
-      <Transition :name="direction === 'backward' ? 'swipe-right' : 'swipe-left'" mode="out-in" appear>
+    <div class="overflow-hidden p-3 sm:p-4">
+      <template v-if="!submitted">
+        <Transition :name="direction === 'backward' ? 'swipe-right' : 'swipe-left'" mode="out-in" appear>
+          <QuestionAndAnswers v-if="!loading && question" :question="question" :key="question.id" />
+        </Transition>
+      </template>
+      <template v-else>
         <QuestionAndAnswers v-if="!loading && question" :question="question" :key="question.id" />
-      </Transition>
+      </template>
     </div>
     <template v-slot:footer>
       <Navigation class="p-3 sm:p-4" />
@@ -33,10 +38,6 @@ const { question, loading, direction } = useGlobalState();
 .swipe-left-leave-active,
 .swipe-right-enter-active,
 .swipe-right-leave-active {
-  position: absolute;
-  left: 0;
-  right: 0;
-  width: 100%;
   transition: all 0.18s cubic-bezier(0.6, 0.05, 0.2, 1);
   pointer-events: none;
   will-change: transform, opacity;

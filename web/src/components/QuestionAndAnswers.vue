@@ -6,7 +6,7 @@ defineProps<{ question: QuestionAndAnswer }>();
 </script>
 
 <template>
-  <div class="grid gap-4 lg:gap-6 text-center">
+  <div class="grid gap-6 text-center">
     <div class="text-2xl font-semibold">{{ question.question }}</div>
 
     <Answers :question="question" />
