@@ -3,7 +3,7 @@ import { useGlobalState } from '../store';
 import ThemeChanger from './ThemeChanger.vue';
 import { AppSetting } from '../main';
 
-const { start, end, question, submitted, previousIndex, nextIndex, submit, reset } = useGlobalState();
+const { start, end, question, submitted, colorless, previousIndex, nextIndex, submit, reset } = useGlobalState();
 </script>
 
 <template>
@@ -20,7 +20,7 @@ const { start, end, question, submitted, previousIndex, nextIndex, submit, reset
     <button v-else-if="!submitted" :disabled="!question?.answer" @click="nextIndex" class="nav-btn btn-primary">
       <div class="size-6" v-html="AppSetting.Icons['next']"></div>
     </button>
-    <button v-else @click="reset" class="nav-btn btn-secondary">
+    <button v-else @click="reset" :disabled="colorless" class="nav-btn btn-secondary">
       <div class="size-6" v-html="AppSetting.Icons['restart']"></div>
     </button>
   </div>

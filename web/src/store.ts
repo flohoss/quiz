@@ -63,8 +63,8 @@ export const useGlobalState = createGlobalState(() => {
   }
 
   function submit() {
-    setColorless(true);
     submitted.value = true;
+    setColorless(true);
     const answers = quiz.value.questions.filter((q) => typeof q.answer === 'number').map((q) => ({ id: q.id, answer: q.answer as number }));
 
     const minTime = new Promise((resolve) => setTimeout(resolve, 500));
@@ -72,8 +72,8 @@ export const useGlobalState = createGlobalState(() => {
 
     Promise.all([minTime, validation]).then(([, resp]) => {
       if (resp.error || !resp.data) {
-        setColorless(false);
-        return;
+        // should never happen, stop the app
+        throw new Error('Failed to validate answers');
       }
       quiz.value = resp.data;
       setColorless(false);
@@ -95,12 +95,11 @@ export const useGlobalState = createGlobalState(() => {
     submitted,
     loading,
     direction,
+    colorless,
     nextIndex,
     previousIndex,
     handleAnswerSelected,
     submit,
     reset,
-    colorless,
-    setColorless,
   };
 });
