@@ -38,12 +38,13 @@ type ServerSettings struct {
 }
 
 type AppSettings struct {
-	Title             string            `mapstructure:"title" yaml:"title" validate:"required"`
-	AmountOfQuestions int               `mapstructure:"amount_of_questions" yaml:"amount_of_questions" validate:"required,gte=1"`
-	Logo              string            `mapstructure:"logo" yaml:"logo" validate:"required,image"`
-	Languages         []string          `mapstructure:"languages" yaml:"languages" validate:"dive,required,bcp47_language_tag" nullable:"false"`
-	CSSVariables      map[string]string `mapstructure:"css_variables" yaml:"css_variables" validate:"dive,required,hexcolor" nullable:"false"`
-	Icons             map[string]string `mapstructure:"icons" yaml:"icons" validate:"required,dive,required,svg" nullable:"false"`
+	Title             string            `json:"title" mapstructure:"title" yaml:"title" validate:"required"`
+	AmountOfQuestions int               `json:"amount_of_questions" mapstructure:"amount_of_questions" yaml:"amount_of_questions" validate:"required,gte=1"`
+	Languages         []string          `json:"languages" mapstructure:"languages" yaml:"languages" validate:"dive,required,bcp47_language_tag" nullable:"false"`
+	CSSVariables      map[string]string `json:"css_variables" mapstructure:"css_variables" yaml:"css_variables" validate:"dive,required,hexcolor" nullable:"false"`
+	Logo              string            `json:"logo" mapstructure:"logo" yaml:"logo" validate:"required,image" `
+	Favicon           string            `json:"favicon" mapstructure:"favicon" yaml:"favicon" validate:"required,image"`
+	Icons             map[string]string `json:"icons" mapstructure:"icons" yaml:"icons" validate:"required,dive,required,svg" nullable:"false"`
 }
 
 type QuestionSetting struct {
@@ -83,9 +84,7 @@ func New() {
 
 	viper.SetDefault("app.title", "Quiz")
 	viper.SetDefault("app.amount_of_questions", 5)
-	viper.SetDefault("app.logo", "/app/config/logo.svg")
 	viper.SetDefault("app.languages", []string{"en", "de"})
-
 	viper.SetDefault("app.css_variables", map[string]string{
 		"--color-primary":           "#294221",
 		"--color-primary-content":   "#ffffff",
@@ -96,7 +95,8 @@ func New() {
 		"--color-error":             "#ac3e31",
 		"--color-error-content":     "#ffffff",
 	})
-
+	viper.SetDefault("app.logo", "/app/config/logo.svg")
+	viper.SetDefault("app.favicon", "/app/config/logo.svg")
 	viper.SetDefault("app.icons", map[string]string{
 		"next":     `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M480 96c17.7 0 32 14.3 32 32s-14.3 32-32 32H272V96zM320 288c17.7 0 32 14.3 32 32s-14.3 32-32 32h-64c-17.7 0-32-14.3-32-32s14.3-32 32-32zm64-64c0 17.7-14.3 32-32 32h-48c-17.7 0-32-14.3-32-32s14.3-32 32-32h48c17.7 0 32 14.3 32 32m-96 160c17.7 0 32 14.3 32 32s-14.3 32-32 32h-64c-17.7 0-32-14.3-32-32s14.3-32 32-32zm-88-96h.6c-5.4 9.4-8.6 20.3-8.6 32c0 13.2 4 25.4 10.8 35.6c-24.9 8.7-42.8 32.5-42.8 60.4c0 11.7 3.1 22.6 8.6 32H160C71.6 448 0 376.4 0 288v-61.7c0-42.4 16.9-83.1 46.9-113.1l11.6-11.6C82.5 77.5 115.1 64 149 64h27c35.3 0 64 28.7 64 64v88c0 22.1-17.9 40-40 40s-40-17.9-40-40v-56c0-8.8-7.2-16-16-16s-16 7.2-16 16v56c0 39.8 32.2 72 72 72"/></svg>`,
 		"previous": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 96c-17.7 0-32 14.3-32 32s14.3 32 32 32h208V96zm160 192c-17.7 0-32 14.3-32 32s14.3 32 32 32h64c17.7 0 32-14.3 32-32s-14.3-32-32-32zm-64-64c0 17.7 14.3 32 32 32h48c17.7 0 32-14.3 32-32s-14.3-32-32-32h-48c-17.7 0-32 14.3-32 32m96 160c-17.7 0-32 14.3-32 32s14.3 32 32 32h64c17.7 0 32-14.3 32-32s-14.3-32-32-32zm88-96h-.6c5.4 9.4 8.6 20.3 8.6 32c0 13.2-4 25.4-10.8 35.6c24.9 8.7 42.8 32.5 42.8 60.4c0 11.7-3.1 22.6-8.6 32h8.6c88.4 0 160-71.6 160-160v-61.7c0-42.4-16.9-83.1-46.9-113.1l-11.6-11.6C429.5 77.5 396.9 64 363 64h-27c-35.3 0-64 28.7-64 64v88c0 22.1 17.9 40 40 40s40-17.9 40-40v-56c0-8.8 7.2-16 16-16s16 7.2 16 16v56c0 39.8-32.2 72-72 72"/></svg>`,

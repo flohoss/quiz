@@ -89,10 +89,8 @@ func SetupRouter() *echo.Echo {
 
 	logo := config.GetApp().Logo
 	e.File(logo, logo, longCacheLifetime)
-	icons := config.GetApp().Icons
-	for _, path := range icons {
-		e.File(path, path, longCacheLifetime)
-	}
+	favicon := config.GetApp().Favicon
+	e.File(favicon, favicon, longCacheLifetime)
 
 	e.GET("/robots.txt", func(ctx echo.Context) error {
 		return ctx.String(http.StatusOK, "User-agent: *\nDisallow: /")
@@ -100,9 +98,6 @@ func SetupRouter() *echo.Echo {
 
 	assets := e.Group("/assets", longCacheLifetime)
 	assets.Static("/", "web/assets")
-
-	favicon := e.Group("/static", longCacheLifetime)
-	favicon.Static("/", "web/static")
 
 	e.RouteNotFound("*", func(ctx echo.Context) error {
 		return ctx.Render(http.StatusOK, "index.html", nil)

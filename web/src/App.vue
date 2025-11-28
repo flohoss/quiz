@@ -13,7 +13,7 @@ const { question, loading, direction, submitted } = useGlobalState();
   <HeroCard>
     <template v-slot:header>
       <div class="flex flex-col items-center w-full gap-5 py-3 sm:py-4">
-        <div class="flex justify-center h-16 bg-auto bg-center bg-no-repeat w-full" :style="`background-image: url(${BackendURL + AppSetting.Logo})`"></div>
+        <div class="flex justify-center h-16 bg-auto bg-center bg-no-repeat w-full" :style="`background-image: url(${BackendURL + AppSetting.logo})`"></div>
         <QuizSteps class="mt-2 w-full" />
       </div>
     </template>

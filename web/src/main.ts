@@ -25,20 +25,24 @@ if (Setting.error || !Setting.data) {
 
 export const AppSetting = Setting.data;
 
-document.title = Setting.data.Title;
+document.title = Setting.data.title;
+const favicon = document.getElementById('dynamic-favicon') as HTMLLinkElement | null;
+if (favicon) {
+  favicon.href = BackendURL + Setting.data.favicon;
+}
 
 const { language } = useNavigatorLanguage();
 let lang = '';
 if (language.value) {
   lang = language.value.split('-')[0] ?? '';
 }
-lang = Setting.data.Languages.includes(lang) ? lang : Setting.data.Languages[0] || 'en';
+lang = Setting.data.languages.includes(lang) ? lang : Setting.data.languages[0] || 'en';
 export const Language = lang;
 
 const root = document.documentElement;
-const originalVars = { ...Setting.data.CSSVariables };
-if (Setting.data.CSSVariables) {
-  Object.entries(Setting.data.CSSVariables).forEach(([key, value]) => {
+const originalVars = { ...Setting.data.css_variables };
+if (Setting.data.css_variables) {
+  Object.entries(Setting.data.css_variables).forEach(([key, value]) => {
     root.style.setProperty(key, value);
   });
 }
