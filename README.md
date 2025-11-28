@@ -1,14 +1,29 @@
 ## Quiz Project
 
-<div style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 2rem;">
+<p align="center">
+  <br/>
+  <img src="config/logo.svg" height="150px">
+  <br/>
+  <br/>
+  This project is a modern, full-stack quiz platform built with Go (backend) and Vue 3 (frontend), designed for easy deployment via Docker. It supports dynamic Theming, multi-language questions, and custom branding.
+  <br/>
+  <br/>
+  </p>
 
-<img src="config/logo.svg" height="150px">
+## Table of Contents
 
-This project is a modern, full-stack quiz platform built with Go (backend) and Vue 3 (frontend), designed for easy deployment via Docker. It supports dynamic Theming, multi-language questions, and custom branding.
+- [Configuration](#configuration)
+  - [Example: config/config.yaml](#example-configconfigyaml)
+  - [Custom Logo](#custom-logo)
+- [Screenshots](#screenshots)
+  - [Dark mode](#dark-mode)
+  - [Light mode](#light-mode)
+- [Docker](#docker)
+  - [run command](#run-command)
+  - [compose file](#compose-file)
+- [Update Dependencies](#update-dependencies)
 
-</div>
-
-### Configuration
+## Configuration
 
 All runtime configuration is managed via a YAML file in the `config/` directory. The main configuration file is `config.yaml`, which controls:
 
@@ -18,7 +33,7 @@ All runtime configuration is managed via a YAML file in the `config/` directory.
 - Icon SVGs for navigation and actions
 - The quiz questions and answers (multi-language)
 
-#### Example: config/config.yaml
+### Example: config/config.yaml
 
 ```yaml
 app:
