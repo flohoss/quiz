@@ -27,8 +27,8 @@ RUN yarn types
 COPY ./web/ ./
 RUN yarn build
 
-FROM golang:${V_GOLANG}-alpine AS final
-RUN apk add --update --no-cache dumb-init && \
+FROM alpine:${V_ALPINE} AS final
+RUN apk add --update --no-cache tzdata dumb-init && \
     rm -rf /tmp/* /var/tmp/* /usr/share/man /var/cache/apk/*
 
 COPY ./config/logo.svg /logo.svg
