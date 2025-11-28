@@ -57,6 +57,7 @@ app:
     submit: <svg .../>
     restart: <svg .../>
   logo: /app/config/logo.svg
+  favicon: /app/config/logo.svg
 questions:
   - id: 1
     question:
