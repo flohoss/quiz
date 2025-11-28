@@ -34,7 +34,7 @@ function getButtonClass(index: number) {
     <button
       v-for="(answer, index) in question.answers"
       :key="`${question.id}-${index + 1}`"
-      class="transition-all duration-200 rounded-lg px-5 py-3 w-full lg:text-lg shadow-sm focus:outline-none cursor-pointer"
+      class="transition-all duration-200 rounded-lg px-5 py-3 w-full text-lg shadow-sm focus:outline-none cursor-pointer"
       :class="getButtonClass(index)"
       :disabled="submitted"
       @click="handleAnswerSelected(question.id, index + 1)"

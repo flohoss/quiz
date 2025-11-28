@@ -1,18 +1,16 @@
 <template>
-  <div class="hero min-h-screen">
-    <div class="hero-content">
-      <div class="card bg-base-100 shadow-md w-[90vw] max-w-xl">
-        <div class="card-body h-[95dvh] max-h-200 flex flex-col justify-between gap-5 lg:gap-10">
-          <header>
-            <slot name="header" />
-          </header>
-          <main class="flex-1 overflow-y-scroll">
-            <slot />
-          </main>
-          <footer>
-            <slot name="footer" />
-          </footer>
-        </div>
+  <div class="hero min-h-dvh">
+    <div class="hero-content m-0 p-0">
+      <div class="bg-base-100 p-2 md:p-5 w-screen max-w-xl h-dvh max-h-200 flex flex-col justify-between gap-10">
+        <header>
+          <slot name="header" />
+        </header>
+        <main class="flex-1">
+          <slot />
+        </main>
+        <footer>
+          <slot name="footer" />
+        </footer>
       </div>
     </div>
   </div>
