@@ -1,3 +1,78 @@
+## Quiz Project
+
+<div style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 2rem;">
+
+<img src="config/logo.svg" height="150px">
+
+This project is a modern, full-stack quiz platform built with Go (backend) and Vue 3 (frontend), designed for easy deployment via Docker. It supports dynamic Theming, multi-language questions, and custom branding.
+
+</div>
+
+### Configuration
+
+All runtime configuration is managed via a YAML file in the `config/` directory. The main configuration file is `config.yaml`, which controls:
+
+- Application title and amount of questions
+- Supported languages
+- Theming via CSS variables (primary, secondary, success, error colors)
+- Icon SVGs for navigation and actions
+- The quiz questions and answers (multi-language)
+
+#### Example: config/config.yaml
+
+```yaml
+app:
+  title: Quiz
+  amount_of_questions: 10
+  languages:
+    - en
+    - de
+  css_variables:
+    --color-primary: '#294221'
+    --color-primary-content: '#ffffff'
+    --color-secondary: '#ac3e31'
+    --color-secondary-content: '#ffffff'
+    --color-success: '#294221'
+    --color-success-content: '#ffffff'
+    --color-error: '#ac3e31'
+    --color-error-content: '#ffffff'
+  icons:
+    next: <svg .../>
+    previous: <svg .../>
+    submit: <svg .../>
+    restart: <svg .../>
+  logo: /app/config/logo.svg
+questions:
+  - id: 1
+    question:
+      en: What is the capital of France?
+      de: Was ist die Hauptstadt von Frankreich?
+    answers:
+      en: [Berlin, Madrid, Paris]
+      de: [Berlin, Madrid, Paris]
+    correct_answer: 3
+```
+
+### Custom Logo
+
+You can provide a custom logo by placing an SVG file at `config/logo.svg`. If the file does not exist, a default logo will be used. The logo is displayed in the quiz header.
+
+## Screenshots
+
+### Dark mode
+
+<p align="center">
+  <img src="screenshots/dark.webp" width="500" />
+  <img src="screenshots/result-dark.webp" width="500" />
+</p>
+
+### Light mode
+
+<p align="center">
+  <img src="screenshots/light.webp" width="500" />
+  <img src="screenshots/result-light.webp" width="500" />
+</p>
+
 ## Docker
 
 ### run command
