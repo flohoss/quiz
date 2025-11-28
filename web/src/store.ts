@@ -1,20 +1,15 @@
-import { createGlobalState, useNavigatorLanguage } from '@vueuse/core';
+import { createGlobalState } from '@vueuse/core';
 import { computed, shallowRef } from 'vue';
 import type { Quiz } from './client/types.gen';
 import { getQuestions, validateAnswers } from './client/sdk.gen';
+import { Language } from './main';
 
 export const emptyQuiz: Quiz = {
   questions: [],
   total: 0,
 };
-const { isSupported, language } = useNavigatorLanguage();
 
 export const useGlobalState = createGlobalState(() => {
-  let lang = 'en';
-  if (isSupported.value && language.value) {
-    lang = language.value.split('-')[0] ?? 'en';
-  }
-
   const quiz = shallowRef<Quiz>(emptyQuiz);
   const index = shallowRef<number>(1);
   const question = computed(() => quiz.value.questions[index.value - 1]);
@@ -27,7 +22,7 @@ export const useGlobalState = createGlobalState(() => {
 
   async function loadQuiz() {
     loading.value = true;
-    const resp = await getQuestions({ query: { language: lang } });
+    const resp = await getQuestions({ query: { language: Language } });
     if (resp.error || !resp.data) {
       loading.value = false;
       return;
@@ -68,7 +63,7 @@ export const useGlobalState = createGlobalState(() => {
     const answers = quiz.value.questions.filter((q) => typeof q.answer === 'number').map((q) => ({ id: q.id, answer: q.answer as number }));
 
     const minTime = new Promise((resolve) => setTimeout(resolve, 500));
-    const validation = validateAnswers({ query: { language: lang }, body: answers });
+    const validation = validateAnswers({ query: { language: Language }, body: answers });
 
     Promise.all([minTime, validation]).then(([, resp]) => {
       if (resp.error || !resp.data) {
