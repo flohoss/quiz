@@ -7,7 +7,7 @@ RUN apk add figlet > /dev/null 2>&1
 RUN figlet Quiz > logo.txt
 
 FROM golang:${V_GOLANG}-alpine AS final
-RUN apk add --update --no-cache dumb-init && \
+RUN apk update && apk add --no-cache tzdata dumb-init && \
     rm -rf /tmp/* /var/tmp/* /usr/share/man /var/cache/apk/*
 
 RUN go install github.com/air-verse/air@latest
