@@ -24,7 +24,7 @@ COPY ./web/ ./
 RUN yarn build
 
 FROM alpine:${V_ALPINE} AS final
-RUN apk update && apk add --no-cache tzdata dumb-init && \
+RUN apk update && apk add --no-cache --no-scripts tzdata dumb-init && \
     rm -rf /tmp/* /var/tmp/* /usr/share/man /var/cache/apk/*
 
 COPY ./config/logo.svg /logo.svg
