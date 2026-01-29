@@ -2,25 +2,25 @@
 @plugin "daisyui";
 
 @plugin 'daisyui/theme' {
-    name: corporate;
-    default: true;
-    prefersdark: false;
+  name: corporate;
+  default: true;
+  prefersdark: false;
 }
 
 @plugin 'daisyui/theme' {
-    name: business;
-    default: false;
-    prefersdark: true;
+  name: business;
+  default: false;
+  prefersdark: true;
 }
 
 @utility container {
-    margin-inline: auto;
+  margin-inline: auto;
 }
 
 @utility nav-btn {
-    @apply btn btn-square btn-xl;
+  @apply btn btn-square btn-xl;
 }
 
 @utility hover {
-    @apply hover:cursor-pointer hover:bg-primary hover:text-primary-content;
+  @apply hover:cursor-pointer hover:bg-primary hover:text-primary-content;
 }
