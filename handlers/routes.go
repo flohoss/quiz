@@ -4,7 +4,7 @@ import (
 	"html/template"
 	"io"
 	"net/http"
-	"strings"
+	"os"
 
 	"github.com/danielgtaylor/huma/v2"
 	"github.com/danielgtaylor/huma/v2/adapters/humaecho"
@@ -45,7 +45,7 @@ func languageValidationMiddleware(api huma.API) func(ctx huma.Context, next func
 	}
 }
 
-func SetupRouter() *echo.Echo {
+func InitRouter() *echo.Echo {
 	e := echo.New()
 
 	e.HideBanner = true
@@ -53,39 +53,26 @@ func SetupRouter() *echo.Echo {
 
 	e.Use(middleware.Recover())
 	e.Use(middleware.CORS())
-	e.Use(middleware.GzipWithConfig(middleware.GzipConfig{
-		Skipper: func(c echo.Context) bool {
-			return strings.Contains(c.Path(), "events")
-		},
-	}))
+	e.Use(middleware.Gzip())
+	e.Pre(middleware.RemoveTrailingSlash())
 
-	h := huma.DefaultConfig("Quiz API", "1.0.0")
-	h.OpenAPIPath = "/api/openapi"
-	h.SchemasPath = "/api/schemas"
-	he := humaecho.New(e, h)
-
-	e.GET("/api/docs", func(ctx echo.Context) error {
-		return ctx.HTML(http.StatusOK, `<!doctype html>
-			<html>
-				<head>
-					<title>API Reference</title>
-					<meta charset="utf-8" />
-					<meta name="viewport" content="width=device-width, initial-scale=1" />
-				</head>
-				<body>
-					<script id="api-reference" data-url="/api/openapi.json"></script>
-					<script src="https://cdn.jsdelivr.net/npm/@scalar/api-reference"></script>
-				</body>
-			</html>`,
-		)
-	})
 	e.Renderer = initTemplates()
 
-	huma.Register(he, getAppOperation(), getAppHandler)
+	return e
+}
 
-	he.UseMiddleware(languageValidationMiddleware(he))
-	huma.Register(he, getQuestionsOperation(), getQuestionsHandler)
-	huma.Register(he, validateAnswersOperation(), validateAnswersHandler)
+func SetupRouter(e *echo.Echo) {
+	h := huma.DefaultConfig("Quiz API", os.Getenv("APP_VERSION"))
+	h.OpenAPIPath = "/api/openapi"
+	h.DocsPath = "/api/docs"
+	h.SchemasPath = "/api/schemas"
+	humaAPI := humaecho.New(e, h)
+
+	huma.Register(humaAPI, getAppOperation(), getAppHandler)
+
+	humaAPI.UseMiddleware(languageValidationMiddleware(humaAPI))
+	huma.Register(humaAPI, getQuestionsOperation(), getQuestionsHandler)
+	huma.Register(humaAPI, validateAnswersOperation(), validateAnswersHandler)
 
 	logo := config.GetApp().Logo
 	e.File(logo, logo, longCacheLifetime)
@@ -102,6 +89,4 @@ func SetupRouter() *echo.Echo {
 	e.RouteNotFound("*", func(ctx echo.Context) error {
 		return ctx.Render(http.StatusOK, "index.html", nil)
 	})
-
-	return e
 }

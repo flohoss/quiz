@@ -17,7 +17,8 @@ func main() {
 	}))
 	slog.SetDefault(logger)
 
-	e := handlers.SetupRouter()
+	e := handlers.InitRouter()
+	handlers.SetupRouter(e)
 
 	slog.Info("Starting server", "url", fmt.Sprintf("http://%s", config.GetServer()))
 	slog.Error(e.Start(config.GetServer()).Error())
