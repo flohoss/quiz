@@ -3,8 +3,8 @@ module github.com/flohoss/quiz
 go 1.25.3
 
 require (
-	github.com/danielgtaylor/huma/v2 v2.37.2
-	github.com/go-playground/validator/v10 v10.30.1
+	github.com/danielgtaylor/huma/v2 v2.37.3
+	github.com/go-playground/validator/v10 v10.30.2
 	github.com/labstack/echo/v4 v4.15.1
 	github.com/spf13/viper v1.21.0
 )
